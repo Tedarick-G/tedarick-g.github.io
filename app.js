@@ -345,10 +345,6 @@ async function loadBrands(sid){
   return arr;
 }
 
-function supplierColor(c){
-  return c?.color||'#777';
-}
-
 function renderSuppliers(){
   supplierList.innerHTML='';
 
@@ -365,11 +361,6 @@ function renderSuppliers(){
       );
 
     b.textContent=c.name||s.id;
-
-    b.style.setProperty(
-      '--supplier-color',
-      supplierColor(c)
-    );
 
     b.disabled=!c.ready;
 
@@ -435,7 +426,6 @@ function renderBrands(){
       continue;
 
     const c=supplierConfigs.get(s.id);
-    const color=supplierColor(c);
 
     for(const b of supplierBrands.get(s.id)||[]){
       const key=`${s.id}:${b.slug}`;
@@ -455,18 +445,18 @@ function renderBrands(){
 
       btn.dataset.key=key;
 
-      btn.style.setProperty(
-        '--brand-color',
-        color
-      );
-
       btn.title=`${c.name} · ${b.name}`;
 
       btn.innerHTML=
-        `<span>${esc(b.name)}</span>`+
+        `<span class="brand-name">${esc(b.name)}</span>`+
         (
           b.count!=null
-            ?` <small>${esc(b.count)}</small>`
+            ?`<span class="brand-count">${esc(b.count)}</span>`
+            :''
+        )+
+        (
+          c.favicon
+            ?`<img class="brand-favicon" src="${esc(c.favicon)}" alt="" loading="lazy" onerror="this.style.display='none'">`
             :''
         );
 
