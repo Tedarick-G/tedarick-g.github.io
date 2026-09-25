@@ -1,0 +1,26 @@
+{
+  "storageWorker": "https://compelkv.tvkapora.workers.dev/",
+  "defaultSelected": ["compel", "akalin"],
+  "suppliers": [
+    {
+      "id": "compel",
+      "config": "suppliers/compel/config.json",
+      "ready": true
+    },
+    {
+      "id": "akalin",
+      "config": "suppliers/akalin/config.json",
+      "ready": true
+    },
+    {
+      "id": "can",
+      "config": "suppliers/can/config.json",
+      "ready": false
+    },
+    {
+      "id": "dore",
+      "config": "suppliers/dore/config.json",
+      "ready": false
+    }
+  ]
+}
