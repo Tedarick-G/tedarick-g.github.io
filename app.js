@@ -202,9 +202,6 @@ async function getJSON(url,opt){
 async function postData(url,data){
   const r=await fetch(url,{
     method:'POST',
-    headers:{
-      'content-type':'application/json'
-    },
     body:JSON.stringify(data)
   });
 
@@ -2705,8 +2702,3 @@ async function init(){
 }
 
 init();
-
-
-
-
-
