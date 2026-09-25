@@ -52,7 +52,6 @@ button:disabled{
   cursor:not-allowed
 }
 
-/* Tedarikçi + marka + sağ kontrol grubu aynı akış */
 #brand-row{
   display:flex;
   flex-wrap:wrap;
@@ -61,18 +60,15 @@ button:disabled{
   margin-bottom:14px
 }
 
-/* Bu iki container artık ayrı kolon oluşturmaz */
 #supplier-list,
 #brand-list{
   display:contents
 }
 
-/* Son tedarikçiden sonra markalara ufak ekstra boşluk */
 #supplier-list .supplier-btn:last-child{
   margin-right:8px
 }
 
-/* Sağ kontrol grubu */
 #data-inputs{
   display:flex;
   align-items:center;
@@ -98,10 +94,11 @@ button:disabled{
   border-color:var(--text)
 }
 
-/* Eski Compel görünümü */
 .brand-btn{
+  display:inline-flex;
+  align-items:center;
   position:relative;
-  padding:6px 18px 6px 14px;
+  padding:6px 14px;
   border:1px solid var(--border);
   background:var(--surface);
   color:var(--text);
@@ -130,19 +127,13 @@ button:disabled{
   vertical-align:middle
 }
 
-/*
-  Favicon layoutta hâlâ 10x10 yer kaplıyor.
-  scale(2) yalnızca görseli 2 kat büyütüyor.
-  Dolayısıyla marka butonunun ölçüsü büyümüyor.
-*/
 .brand-favicon{
-  position:absolute;
-  right:5px;
-  top:50%;
+  display:block;
+  flex:0 0 10px;
   width:10px;
   height:10px;
   object-fit:contain;
-  transform:translateY(-50%) scale(2);
+  transform:scale(2);
   transform-origin:center;
   pointer-events:none
 }
