@@ -1,0 +1,66 @@
+{
+  "id": "compel",
+  "name": "Compel",
+  "worker": "https://compelkv.tvkapora.workers.dev/",
+  "color": "#2596be",
+  "delayMs": 2000,
+  "jitterMs": 400,
+
+  "fields": [
+    "urun_linki",
+    "kapak_gorsel",
+    "urun_adi",
+    "varyant_adi",
+    "sku",
+    "ean",
+    "marka_adi",
+    "kategori_adi",
+    "guncel_fiyat",
+    "usd_kdv_haric",
+    "eur_kdv_haric",
+    "stok"
+  ],
+
+  "match": {
+    "rules": [
+      {
+        "source": "sku",
+        "targets": ["Web Servis Kodu", "Tedarikçi Ürün Kodu"],
+        "normalize": "exact"
+      },
+      {
+        "source": "ean",
+        "targets": ["Barkod"],
+        "normalize": "digits",
+        "unique": true
+      }
+    ]
+  },
+
+  "aide": {
+    "enabled": true,
+    "tsoftFields": ["Tedarikçi Ürün Kodu", "Web Servis Kodu"]
+  },
+
+  "columns": [
+    {"id":"index","label":"Sıra","type":"index","visible":true},
+    {"id":"image","label":"Görsel","type":"image","field":"kapak_gorsel","visible":true},
+    {"id":"sku","label":"SKU","type":"sku","field":"sku","visible":false},
+    {"id":"product","label":"Ürün Adı","type":"product","field":"urun_adi","visible":true},
+    {"id":"tsoftProduct","label":"T-Soft Ürün Adı","type":"tsoft","field":"Ürün Adı","visible":false},
+    {"id":"category","label":"Kategori","type":"text","field":"kategori_adi","visible":false},
+
+    {"id":"sourceStock","label":"Compel Stok","type":"stock","field":"stok","visible":true},
+    {"id":"aideStock","label":"Aide Stok","type":"aideStock","visible":true},
+    {"id":"tsoftStock","label":"T-Soft Stok","type":"tsoft","field":"Stok","visible":true},
+
+    {"id":"sourcePrice","label":"Compel TL","type":"price","field":"guncel_fiyat","visible":true},
+    {"id":"usd","label":"USD","type":"price","field":"usd_kdv_haric","visible":false},
+    {"id":"eur","label":"EUR","type":"price","field":"eur_kdv_haric","visible":false},
+    {"id":"tsoftPrice","label":"T-Soft Fiyat","type":"tsoftPrice","field":"KDV Dahil Fiyat","visible":true},
+    {"id":"difference","label":"Fark","type":"difference","visible":true},
+
+    {"id":"ean","label":"EAN","type":"text","field":"ean","visible":false},
+    {"id":"barcode","label":"Barkod","type":"tsoft","field":"Barkod","visible":false}
+  ]
+}
