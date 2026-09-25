@@ -52,55 +52,53 @@ button:disabled{
   cursor:not-allowed
 }
 
+/* Tedarikçi + marka + sağ kontrol grubu aynı akış */
 #brand-row{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
-  gap:0;
+  gap:8px;
   margin-bottom:14px
 }
 
+/* Bu iki container artık ayrı kolon oluşturmaz */
 #supplier-list,
-#brand-list,
+#brand-list{
+  display:contents
+}
+
+/* Son tedarikçiden sonra markalara ufak ekstra boşluk */
+#supplier-list .supplier-btn:last-child{
+  margin-right:8px
+}
+
+/* Sağ kontrol grubu */
 #data-inputs{
   display:flex;
-  flex-wrap:wrap;
   align-items:center;
-  gap:8px
-}
-
-#supplier-list{
-  padding-right:12px;
-  margin-right:4px
-}
-
-#brand-list{
-  flex:1;
-  min-width:0
-}
-
-#data-inputs{
+  gap:8px;
   margin-left:auto;
-  padding-left:10px;
   flex-shrink:0
 }
 
 .supplier-btn{
   padding:6px 14px;
+  border:1px solid var(--border);
   background:var(--surface);
   color:var(--text);
-  border:1px solid var(--border);
   font-size:12px;
-  letter-spacing:.03em
+  letter-spacing:.03em;
+  min-height:30px
 }
 
 .supplier-btn:hover,
 .supplier-btn.active{
   background:var(--text);
-  color:var(--surface);
+  color:#fff;
   border-color:var(--text)
 }
 
+/* Eski Compel görünümü */
 .brand-btn{
   position:relative;
   padding:6px 18px 6px 14px;
@@ -112,7 +110,8 @@ button:disabled{
   letter-spacing:.03em;
   white-space:nowrap;
   line-height:16px;
-  min-height:30px
+  min-height:30px;
+  height:30px
 }
 
 .brand-btn:hover,
@@ -131,20 +130,20 @@ button:disabled{
   vertical-align:middle
 }
 
-.brand-count{
-  font-size:10px;
-  opacity:.6;
-  margin-left:4px
-}
-
+/*
+  Favicon layoutta hâlâ 10x10 yer kaplıyor.
+  scale(2) yalnızca görseli 2 kat büyütüyor.
+  Dolayısıyla marka butonunun ölçüsü büyümüyor.
+*/
 .brand-favicon{
   position:absolute;
-  right:4px;
+  right:5px;
   top:50%;
-  transform:translateY(-50%);
   width:10px;
   height:10px;
   object-fit:contain;
+  transform:translateY(-50%) scale(2);
+  transform-origin:center;
   pointer-events:none
 }
 
@@ -513,14 +512,9 @@ body.dark-mode .match-ok td{
 }
 
 @media(max-width:900px){
-  #brand-row{
-    align-items:flex-start
-  }
 
   #data-inputs{
-    width:100%;
-    margin-top:10px;
-    padding-left:0
+    margin-left:auto
   }
 
   .unmatched-grid{
