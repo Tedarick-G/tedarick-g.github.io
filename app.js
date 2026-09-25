@@ -450,11 +450,6 @@ function renderBrands(){
       btn.innerHTML=
         `<span class="brand-name">${esc(b.name)}</span>`+
         (
-          b.count!=null
-            ?`<span class="brand-count">${esc(b.count)}</span>`
-            :''
-        )+
-        (
           c.favicon
             ?`<img class="brand-favicon" src="${esc(c.favicon)}" alt="" loading="lazy" onerror="this.style.display='none'">`
             :''
@@ -1772,7 +1767,6 @@ function cellHTML(
           :esc(v);
 
       cls='num';
-
       break;
     }
 
