@@ -40,7 +40,7 @@ button{
   background:var(--surface);
   color:var(--text);
   cursor:pointer;
-  transition:.15s
+  transition:background .15s,color .15s,border-color .15s
 }
 
 button:hover{
@@ -52,73 +52,74 @@ button:disabled{
   cursor:not-allowed
 }
 
-#supplier-row{
-  margin-bottom:10px
+#brand-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0;
+  margin-bottom:14px
 }
 
 #supplier-list,
 #brand-list,
 #data-inputs{
   display:flex;
+  flex-wrap:wrap;
   align-items:center;
-  gap:8px;
-  flex-wrap:wrap
+  gap:8px
 }
 
-.supplier-btn{
-  font-weight:500;
-  border-color:var(--supplier-color)
-}
-
-.supplier-btn.active{
-  background:var(--supplier-color);
-  color:#fff
-}
-
-.supplier-btn:not(.active){
-  box-shadow:inset 0 -2px 0 var(--supplier-color)
-}
-
-#brand-row{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:14px
+#supplier-list{
+  padding-right:12px;
+  margin-right:4px
 }
 
 #brand-list{
-  flex:1
+  flex:1;
+  min-width:0
+}
+
+#data-inputs{
+  margin-left:auto;
+  padding-left:10px;
+  flex-shrink:0
+}
+
+.supplier-btn{
+  padding:6px 14px;
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--border);
+  font-size:12px;
+  letter-spacing:.03em
+}
+
+.supplier-btn:hover,
+.supplier-btn.active{
+  background:var(--text);
+  color:var(--surface);
+  border-color:var(--text)
 }
 
 .brand-btn{
-  --brand-color:#777;
   position:relative;
-  overflow:hidden;
-  min-height:31px;
-  border-color:var(--brand-color);
-  background:linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--brand-color) 100%
-  );
-  color:#fff;
-  text-shadow:0 1px 2px rgba(0,0,0,.75);
-  letter-spacing:.03em
+  padding:6px 18px 6px 14px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  cursor:pointer;
+  font-size:12px;
+  letter-spacing:.03em;
+  white-space:nowrap;
+  line-height:16px;
+  min-height:30px
 }
 
 .brand-btn:hover,
 .brand-btn.active{
-  filter:brightness(.88)
-}
-
-.brand-btn.active{
-  outline:2px solid var(--text);
-  outline-offset:1px
-}
-
-.brand-btn small{
-  font-size:10px;
-  opacity:.8
+  background:var(--text);
+  color:#fff;
+  border-color:var(--text)
 }
 
 .brand-btn.multi-selected{
@@ -126,9 +127,25 @@ button:disabled{
   outline-offset:1px
 }
 
-#data-inputs{
-  margin-left:auto;
-  flex-shrink:0
+.brand-name{
+  vertical-align:middle
+}
+
+.brand-count{
+  font-size:10px;
+  opacity:.6;
+  margin-left:4px
+}
+
+.brand-favicon{
+  position:absolute;
+  right:4px;
+  top:50%;
+  transform:translateY(-50%);
+  width:10px;
+  height:10px;
+  object-fit:contain;
+  pointer-events:none
 }
 
 #btn-select.active{
@@ -455,6 +472,20 @@ body.dark-mode{
   --muted:#aaa
 }
 
+body.dark-mode .supplier-btn.active,
+body.dark-mode .brand-btn.active,
+body.dark-mode .brand-btn:hover,
+body.dark-mode .supplier-btn:hover{
+  background:#eee;
+  color:#111;
+  border-color:#eee
+}
+
+body.dark-mode #btn-select.active{
+  background:#eee;
+  color:#111
+}
+
 body.dark-mode tr:hover td,
 body.dark-mode #main-table tbody tr.sel td{
   background:#242424!important
@@ -483,11 +514,13 @@ body.dark-mode .match-ok td{
 
 @media(max-width:900px){
   #brand-row{
-    display:block
+    align-items:flex-start
   }
 
   #data-inputs{
-    margin-top:10px
+    width:100%;
+    margin-top:10px;
+    padding-left:0
   }
 
   .unmatched-grid{
@@ -498,5 +531,3 @@ body.dark-mode .match-ok td{
     padding:12px
   }
 }
-
-
