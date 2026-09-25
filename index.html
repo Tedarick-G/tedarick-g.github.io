@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tedarikçi Yönetimi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="data-modal" class="modal hidden">
+  <div class="modal-inner">
+    <p id="data-modal-title"></p>
+    <div class="modal-actions">
+      <button id="data-modal-existing"></button>
+      <button id="data-modal-new"></button>
+      <button id="data-modal-cancel">İptal</button>
+    </div>
+  </div>
+</div>
+
+<div id="aide-modal" class="modal hidden">
+  <div class="modal-inner">
+    <textarea id="aide-paste" placeholder="Aide verisini buraya yapıştırın..."></textarea>
+    <div class="modal-actions">
+      <button id="aide-load">Yükle</button>
+      <button id="aide-close">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div id="supplier-row">
+    <div id="supplier-list"></div>
+  </div>
+
+  <div id="brand-row">
+    <div id="brand-list"></div>
+
+    <div id="data-inputs">
+      <button id="mode-btn">Mod</button>
+      <button id="btn-select">Seç</button>
+      <button id="tsoft-btn">T-Soft</button>
+      <input type="file" id="tsoft-file" accept=".csv" hidden>
+      <button id="aide-btn">Aide</button>
+      <button id="btn-refresh">Güncelle</button>
+      <button id="save-table-btn">Kaydet</button>
+    </div>
+  </div>
+
+  <div id="toolbar" class="hidden">
+    <span id="brand-title"></span>
+    <span id="status"></span>
+  </div>
+
+  <div id="notice" class="hidden"></div>
+
+  <div id="multi-progress" class="hidden">
+    <div class="pbar"><span id="general-bar"></span></div>
+    <div class="pbar"><span id="brand-bar"></span></div>
+    <div id="multi-log"></div>
+  </div>
+
+  <div id="sticky-header">
+    <div id="col-toggles" class="hidden"></div>
+  </div>
+
+  <div id="table-wrap" class="hidden">
+    <table id="main-table">
+      <thead id="table-head"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div id="unmatched" class="hidden"></div>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
