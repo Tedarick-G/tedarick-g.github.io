@@ -2,10 +2,9 @@
   "id": "akalin",
   "name": "Akalın",
   "worker": "https://r2.tvkapora.workers.dev/",
-  "favicon": "https://www.akalinmuzik.com/favicon.ico",
+  "favicon": "https://tedarick-g.github.io/suppliers/akalin/A.png",
   "delayMs": 2000,
   "jitterMs": 400,
-
   "fields": [
     "urun_linki",
     "kapak_gorsel",
@@ -17,7 +16,6 @@
     "guncel_fiyat",
     "stok"
   ],
-
   "match": {
     "rules": [
       {
@@ -29,7 +27,6 @@
       }
     ]
   },
-
   "aide": {
     "enabled": true,
     "tsoftFields": [
@@ -37,7 +34,6 @@
       "Web Servis Kodu"
     ]
   },
-
   "columns": [
     {
       "id": "index",
