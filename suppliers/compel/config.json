@@ -2,7 +2,7 @@
   "id": "compel",
   "name": "Compel",
   "worker": "https://compelkv.tvkapora.workers.dev/",
-  "favicon": "https://icons.duckduckgo.com/ip3/www.compel.com.tr.ico",
+  "favicon": "https://tedarick-g.github.io/suppliers/compel/clogo.png",
   "delayMs": 2000,
   "jitterMs": 400,
   "fields": [
