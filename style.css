@@ -95,10 +95,8 @@ button:disabled{
 }
 
 .brand-btn{
-  display:inline-flex;
-  align-items:center;
   position:relative;
-  padding:6px 14px;
+  padding:6px 18px 6px 14px;
   border:1px solid var(--border);
   background:var(--surface);
   color:var(--text);
@@ -128,12 +126,13 @@ button:disabled{
 }
 
 .brand-favicon{
-  display:block;
-  flex:0 0 10px;
+  position:absolute;
+  right:5px;
+  top:50%;
   width:10px;
   height:10px;
   object-fit:contain;
-  transform:scale(2);
+  transform:translateY(-50%) scale(2);
   transform-origin:center;
   pointer-events:none
 }
