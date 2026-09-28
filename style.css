@@ -96,7 +96,7 @@ button:disabled{
 
 .brand-btn{
   position:relative;
-  padding:6px 18px 6px 14px;
+  padding:6px 28px 6px 14px;
   border:1px solid var(--border);
   background:var(--surface);
   color:var(--text);
@@ -128,7 +128,7 @@ button:disabled{
 
 .brand-favicon{
   position:absolute;
-  right:5px;
+  right:13px;
   top:50%;
   width:10px;
   height:10px;
