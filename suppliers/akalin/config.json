@@ -2,7 +2,7 @@
   "id": "akalin",
   "name": "Akalın",
   "worker": "https://r2.tvkapora.workers.dev/",
-  "favicon": "https://tedarick-g.github.io/suppliers/akalin/A.png",
+  "favicon": "https://www.akalinmuzik.com/favicon.ico",
   "delayMs": 2000,
   "jitterMs": 400,
   "fields": [
