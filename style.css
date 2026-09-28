@@ -122,7 +122,8 @@ button:disabled{
 }
 
 .brand-name{
-  vertical-align:middle
+  vertical-align:middle;
+  margin-right:8px
 }
 
 .brand-favicon{
