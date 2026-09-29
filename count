@@ -1,0 +1,7 @@
+<!doctype html>
+<input id=a placeholder="Normal fiyat">
+<input id=b placeholder="İndirimli fiyat">
+<input id=c placeholder="Sonuç" readonly>
+<script>
+oninput=()=>c.value=a.value/(b.value/a.value)
+</script>
