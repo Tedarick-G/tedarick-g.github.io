@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sipariş Yardım Hesaplama</title>
+
 <style>
 :root{
   --purple:#f2e5f0;
@@ -14,7 +15,11 @@
   --thin:1px;
   --medium:2px;
 }
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   padding:24px;
@@ -23,18 +28,25 @@ body{
   font-family:"Aptos Narrow",Aptos,Arial,sans-serif;
   font-size:16px;
 }
-.sheet{width:520px;max-width:100%}
+
+.sheet{
+  width:520px;
+  max-width:100%;
+}
+
 table{
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
   margin:0;
 }
+
 col.c1{width:22.8%}
 col.c2{width:19.4%}
-col.c3{width:24.0%}
+col.c3{width:24%}
 col.c4{width:18.1%}
 col.c5{width:15.7%}
+
 td{
   height:23px;
   padding:1px 6px;
@@ -44,11 +56,12 @@ td{
   border:0;
 }
 
-/* Excel'deki medium/thin hücre duvarları */
+/* Hücre duvarları */
 .btM{border-top:var(--medium) solid var(--line)!important}
 .brM{border-right:var(--medium) solid var(--line)!important}
 .bbM{border-bottom:var(--medium) solid var(--line)!important}
 .blM{border-left:var(--medium) solid var(--line)!important}
+
 .btT{border-top:var(--thin) solid var(--line)!important}
 .brT{border-right:var(--thin) solid var(--line)!important}
 .bbT{border-bottom:var(--thin) solid var(--line)!important}
@@ -59,23 +72,50 @@ td{
   background:#fff;
   font-weight:400;
 }
-.label,.head{background:var(--purple)}
-.label{text-align:right}
-.head{text-align:center}
-.input-cell{background:var(--green);padding:0}
+
+.label,
+.head{
+  background:var(--purple);
+}
+
+.label{
+  text-align:right;
+}
+
+.head{
+  text-align:center;
+}
+
+.input-cell{
+  background:var(--green);
+  padding:0;
+}
+
 .calc{
   background:var(--orange);
   text-align:center;
-  font-variant-numeric:tabular-nums
+  font-variant-numeric:tabular-nums;
 }
-.money{text-align:right;padding-right:8px}
-.rate{text-align:center}
-.spacer{height:23px}
+
+.money{
+  text-align:right;
+  padding-right:8px;
+}
+
+.rate{
+  text-align:center;
+}
+
+.spacer{
+  height:23px;
+}
+
 .note{
   background:var(--note);
   text-align:center;
   vertical-align:top;
 }
+
 input{
   width:100%;
   height:100%;
@@ -88,6 +128,7 @@ input{
   color:#111;
   text-align:right;
 }
+
 .add{
   width:100%;
   height:100%;
@@ -100,12 +141,87 @@ input{
   padding:1px 6px;
   cursor:pointer;
 }
-.add:hover{text-decoration:underline}
+
+.add:hover{
+  text-decoration:underline;
+}
+
+/* HARF DÜZELTME ALANI */
+
+.text-tool{
+  width:100%;
+  margin-top:23px;
+  border:2px solid var(--line);
+}
+
+.text-tool-title{
+  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:2px solid var(--line);
+  background:#fff;
+}
+
+.text-tool textarea{
+  display:block;
+  width:100%;
+  height:150px;
+  resize:vertical;
+  border:0;
+  border-bottom:2px solid var(--line);
+  outline:0;
+  padding:10px;
+  font:inherit;
+  line-height:1.4;
+  background:#fff;
+  color:#111;
+}
+
+.text-buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.text-buttons button{
+  height:34px;
+  border:0;
+  border-right:1px solid var(--line);
+  background:var(--purple);
+  font:inherit;
+  cursor:pointer;
+}
+
+.text-buttons button:last-child{
+  border-right:0;
+}
+
+.text-buttons button:hover{
+  background:#ead8e7;
+}
+
+.text-buttons button.copied{
+  background:var(--green);
+}
 
 @media(max-width:560px){
-  body{padding:12px}
-  .sheet{width:100%}
-  td,input,.add{font-size:14px}
+
+  body{
+    padding:12px;
+  }
+
+  .sheet{
+    width:100%;
+  }
+
+  td,
+  input,
+  .add,
+  .text-buttons button,
+  .text-tool textarea{
+    font-size:14px;
+  }
+
 }
 </style>
 </head>
@@ -114,7 +230,10 @@ input{
 
 <div class="sheet">
 
-  <table id="commissionTable" aria-label="Komisyon Hesaplama">
+  <!-- KOMİSYON HESAPLAMA -->
+
+  <table id="commissionTable">
+
     <colgroup>
       <col class="c1">
       <col class="c2">
@@ -131,8 +250,15 @@ input{
 
     <tr>
       <td class="label blM btM bbM"></td>
-      <td class="head blM brT btM bbM">Tutar</td>
-      <td class="head blT brT btM bbM">Komisyon</td>
+
+      <td class="head blM brT btM bbM">
+        Tutar
+      </td>
+
+      <td class="head blT brT btM bbM">
+        Komisyon
+      </td>
+
       <td colspan="2" class="head blT brM btM bbM">
         Komisyonlu Tutar
       </td>
@@ -140,7 +266,8 @@ input{
 
     <tbody id="productRows">
 
-      <tr class="product-row first-product">
+      <tr class="product-row">
+
         <td class="label product-name blM brM btM bbT">
           Ürün 1
         </td>
@@ -156,9 +283,11 @@ input{
         <td colspan="2" class="calc total money blT brM btM bbT">
           0,00
         </td>
+
       </tr>
 
       <tr class="product-row">
+
         <td class="label product-name blM brM btT bbT">
           Ürün 2
         </td>
@@ -174,9 +303,11 @@ input{
         <td colspan="2" class="calc total money blT brM btT bbT">
           0,00
         </td>
+
       </tr>
 
       <tr class="product-row">
+
         <td class="label product-name blM brM btT bbT">
           Ürün 3
         </td>
@@ -192,11 +323,13 @@ input{
         <td colspan="2" class="calc total money blT brM btT bbT">
           0,00
         </td>
+
       </tr>
 
     </tbody>
 
-    <tr id="addRow">
+    <tr>
+
       <td class="label blM brM btT bbT">
         <button class="add" type="button" id="addProduct">
           Ürün Ekle
@@ -208,9 +341,11 @@ input{
       <td class="calc blT brT btT bbT"></td>
 
       <td colspan="2" class="calc blT brM btT bbT"></td>
+
     </tr>
 
     <tr>
+
       <td class="label blM brM btM bbM">
         Toplam :
       </td>
@@ -226,9 +361,11 @@ input{
       <td colspan="2" class="calc money blT brM btM bbM" id="sumTotal">
         0,00
       </td>
+
     </tr>
 
     <tr>
+
       <td class="label blM brM btM bbM">
         Komisyon :
       </td>
@@ -244,13 +381,16 @@ input{
       <td colspan="2" class="calc rate blM brM btM bbM" id="commissionRate">
         0
       </td>
+
     </tr>
 
   </table>
 
   <div class="spacer"></div>
 
-  <table aria-label="Havale Hesaplama">
+  <!-- HAVALE HESAPLAMA -->
+
+  <table>
 
     <colgroup>
       <col class="c1">
@@ -294,7 +434,9 @@ input{
 
   <div class="spacer"></div>
 
-  <table aria-label="Bilgi">
+  <!-- BİLGİ -->
+
+  <table>
 
     <colgroup>
       <col class="c1">
@@ -306,15 +448,53 @@ input{
 
     <tr>
       <td colspan="5" class="note blM brM btM bbM">
-        Sadece Yeşil Hücreler Doldurma&nbsp; Alanlarıdır
+        Sadece Yeşil Hücreler Doldurma Alanlarıdır
       </td>
     </tr>
 
   </table>
 
+  <!-- HARF DÜZELTME -->
+
+  <div class="text-tool">
+
+    <div class="text-tool-title">
+      Büyük / Küçük Harf Düzeltme
+    </div>
+
+    <textarea
+      id="textFixArea"
+      placeholder="Metni buraya yapıştırın..."
+    ></textarea>
+
+    <div class="text-buttons">
+
+      <button type="button" data-mode="upper">
+        TÜMÜ
+      </button>
+
+      <button type="button" data-mode="title">
+        Baş Harf
+      </button>
+
+      <button type="button" data-mode="sentence">
+        Baş harf
+      </button>
+
+      <button type="button" data-mode="lower">
+        tümü
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
 
 <script>
+
+/* SAYI İŞLEMLERİ */
+
 const trNumber = new Intl.NumberFormat('tr-TR',{
   minimumFractionDigits:2,
   maximumFractionDigits:2
@@ -341,10 +521,14 @@ function parseNum(v){
 }
 
 function fmt(n){
+
   return trNumber.format(
     Number.isFinite(n) ? n : 0
   );
+
 }
+
+/* KOMİSYON */
 
 function calculateCommission(){
 
@@ -405,7 +589,10 @@ function calculateCommission(){
           Math.round(rate * 1000000) / 1000000
         ).replace('.',',')
       : '0';
+
 }
+
+/* HAVALE */
 
 function calculateTransfer(){
 
@@ -423,25 +610,34 @@ function calculateTransfer(){
         ? (normal * normal / discount)
         : 0
     );
+
 }
+
+/* ÜRÜN EKLE */
 
 function bindInputs(){
 
   document
     .querySelectorAll('.amount')
-    .forEach(input => {
-      input.oninput = calculateCommission;
+    .forEach(input=>{
+
+      input.oninput =
+        calculateCommission;
+
     });
 
 }
 
 function makeProductRow(n){
 
-  const row = document.createElement('tr');
+  const row =
+    document.createElement('tr');
 
-  row.className = 'product-row';
+  row.className =
+    'product-row';
 
   row.innerHTML = `
+
     <td class="label product-name blM brM btT bbT">
       Ürün ${n}
     </td>
@@ -457,9 +653,11 @@ function makeProductRow(n){
     <td colspan="2" class="calc total money blT brM btT bbT">
       0,00
     </td>
+
   `;
 
   return row;
+
 }
 
 bindInputs();
@@ -487,29 +685,207 @@ document
 
 document
   .getElementById('addProduct')
-  .addEventListener('click',()=>{
+  .addEventListener(
+    'click',
+    ()=>{
 
-    const body =
-      document.getElementById('productRows');
+      const body =
+        document.getElementById('productRows');
 
-    const n =
-      body.querySelectorAll('.product-row').length + 1;
+      const n =
+        body.querySelectorAll('.product-row').length + 1;
 
-    const row =
-      makeProductRow(n);
+      const row =
+        makeProductRow(n);
 
-    body.appendChild(row);
+      body.appendChild(row);
 
-    bindInputs();
+      bindInputs();
 
-    row.querySelector('input').focus();
+      row
+        .querySelector('input')
+        .focus();
 
-    calculateCommission();
+      calculateCommission();
+
+    }
+  );
+
+/* HARF DÜZELTME */
+
+const textFixArea =
+  document.getElementById('textFixArea');
+
+function trUpper(text){
+
+  return text.toLocaleUpperCase('tr-TR');
+
+}
+
+function trLower(text){
+
+  return text.toLocaleLowerCase('tr-TR');
+
+}
+
+function titleCase(text){
+
+  const lower =
+    trLower(text);
+
+  return lower.replace(
+    /(^|[\s\-\/("''])\p{L}/gu,
+    match => trUpper(match)
+  );
+
+}
+
+function sentenceCase(text){
+
+  let result =
+    trLower(text);
+
+  result = result.replace(
+    /(^\s*\p{L}|[.!?]\s*\p{L})/gu,
+    match => trUpper(match)
+  );
+
+  return result;
+
+}
+
+async function copyText(text,button){
+
+  let copied = false;
+
+  try{
+
+    await navigator.clipboard.writeText(text);
+    copied = true;
+
+  }
+  catch(e){
+
+    try{
+
+      textFixArea.focus();
+      textFixArea.select();
+
+      copied =
+        document.execCommand('copy');
+
+      textFixArea.setSelectionRange(
+        text.length,
+        text.length
+      );
+
+    }
+    catch(err){}
+
+  }
+
+  if(copied){
+
+    const oldText =
+      button.dataset.originalText ||
+      button.textContent;
+
+    button.dataset.originalText =
+      oldText;
+
+    button.textContent =
+      'Kopyalandı';
+
+    button.classList.add(
+      'copied'
+    );
+
+    clearTimeout(
+      button.copyTimer
+    );
+
+    button.copyTimer =
+      setTimeout(()=>{
+
+        button.textContent =
+          oldText;
+
+        button.classList.remove(
+          'copied'
+        );
+
+      },1200);
+
+  }
+
+}
+
+document
+  .querySelectorAll(
+    '.text-buttons button'
+  )
+  .forEach(button=>{
+
+    button.dataset.originalText =
+      button.textContent.trim();
+
+    button.addEventListener(
+      'click',
+      async()=>{
+
+        let text =
+          textFixArea.value;
+
+        switch(
+          button.dataset.mode
+        ){
+
+          case 'upper':
+
+            text =
+              trUpper(text);
+
+            break;
+
+          case 'title':
+
+            text =
+              titleCase(text);
+
+            break;
+
+          case 'sentence':
+
+            text =
+              sentenceCase(text);
+
+            break;
+
+          case 'lower':
+
+            text =
+              trLower(text);
+
+            break;
+
+        }
+
+        textFixArea.value =
+          text;
+
+        await copyText(
+          text,
+          button
+        );
+
+      }
+    );
 
   });
 
 calculateCommission();
 calculateTransfer();
+
 </script>
 
 </body>
