@@ -1,193 +1,516 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!doctype html>
+<html lang="tr">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 16.0px Arial; color: #0e0e0e; -webkit-text-stroke: #0e0e0e}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: right; font: 16.0px Arial; color: #0e0e0e; -webkit-text-stroke: #0e0e0e; min-height: 18.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: right; font: 16.0px Arial; color: #0e0e0e; -webkit-text-stroke: #0e0e0e}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Arial; color: #0e0e0e; -webkit-text-stroke: #0e0e0e}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Arial; color: #0e0e0e; -webkit-text-stroke: #0e0e0e; min-height: 18.0px}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 16.0px Arial; color: #0e0e0e; -webkit-text-stroke: #0e0e0e; min-height: 18.0px}
-    span.s1 {font-kerning: none}
-    table.t1 {border-collapse: collapse; table-layout: fixed}
-    td.td1 {width: 518.0px; background-color: #ffffff; border-style: solid; border-width: 2.0px 2.0px 0.0px 2.0px; border-color: #181818 #181818 #0e0e0e #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td2 {width: 118.1px; background-color: #eedeec; border-style: solid; border-width: 2.0px 0.0px 2.0px 2.0px; border-color: #181818 #0e0e0e #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td3 {width: 100.5px; background-color: #eedeec; border-style: solid; border-width: 2.0px 1.0px 2.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td4 {width: 124.3px; background-color: #eedeec; border-style: solid; border-width: 2.0px 1.0px 2.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td5 {width: 175.1px; background-color: #eedeec; border-style: solid; border-width: 2.0px 2.0px 2.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td6 {width: 118.1px; background-color: #eedeec; border-style: solid; border-width: 2.0px 2.0px 1.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td7 {width: 100.5px; background-color: #d1e6c9; border-style: solid; border-width: 2.0px 0.0px 1.0px 0.0px; border-color: #181818 #0e0e0e #181818 #0e0e0e}
-    td.td8 {width: 124.3px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 1.0px 1.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td9 {width: 175.1px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 2.0px 1.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td10 {width: 118.1px; background-color: #eedeec; border-style: solid; border-width: 1.0px 2.0px 1.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td11 {width: 100.5px; background-color: #d1e6c9; border-style: solid; border-width: 1.0px 0.0px 1.0px 0.0px; border-color: #181818 #0e0e0e #181818 #0e0e0e}
-    td.td12 {width: 124.3px; background-color: #fbddcd; border-style: solid; border-width: 1.0px 1.0px 1.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td13 {width: 175.1px; background-color: #fbddcd; border-style: solid; border-width: 1.0px 2.0px 1.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td14 {width: 124.3px; background-color: #fbddcd; border-style: solid; border-width: 1.0px 1.0px 1.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td15 {width: 175.1px; background-color: #fbddcd; border-style: solid; border-width: 1.0px 2.0px 1.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td16 {width: 118.1px; background-color: #eedeec; border-style: solid; border-width: 2.0px 2.0px 2.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td17 {width: 100.5px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 1.0px 2.0px 0.0px; border-color: #181818 #181818 #181818 #0e0e0e; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td18 {width: 124.3px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 1.0px 2.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td19 {width: 175.1px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 2.0px 2.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td20 {width: 100.5px; background-color: #d1e6c9; border-style: solid; border-width: 2.0px 2.0px 2.0px 0.0px; border-color: #181818 #181818 #181818 #0e0e0e}
-    td.td21 {width: 124.3px; background-color: #eedeec; border-style: solid; border-width: 2.0px 2.0px 2.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td22 {width: 175.1px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 2.0px 2.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-    td.td23 {width: 100.5px; background-color: #d1e6c9; border-style: solid; border-width: 2.0px 0.0px 2.0px 0.0px; border-color: #181818 #0e0e0e #181818 #0e0e0e}
-    td.td24 {width: 93.8px; background-color: #d1e6c9; border-style: solid; border-width: 2.0px 0.0px 2.0px 0.0px; border-color: #181818 #0e0e0e #181818 #0e0e0e}
-    td.td25 {width: 81.3px; background-color: #fbddcd; border-style: solid; border-width: 2.0px 2.0px 2.0px 1.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 8.0px 1.0px 6.0px}
-    td.td26 {width: 518.0px; background-color: #dcedd0; border-style: solid; border-width: 2.0px 2.0px 2.0px 2.0px; border-color: #181818 #181818 #181818 #181818; padding: 1.0px 6.0px 1.0px 6.0px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sipariş Yardım Hesaplama</title>
+<style>
+:root{
+  --purple:#f2e5f0;
+  --green:#d9ead3;
+  --orange:#fce4d6;
+  --note:#e2f0d9;
+  --line:#202020;
+  --thin:1px;
+  --medium:2px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:24px;
+  background:#fff;
+  color:#111;
+  font-family:"Aptos Narrow",Aptos,Arial,sans-serif;
+  font-size:16px;
+}
+.sheet{width:520px;max-width:100%}
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  margin:0;
+}
+col.c1{width:22.8%}
+col.c2{width:19.4%}
+col.c3{width:24.0%}
+col.c4{width:18.1%}
+col.c5{width:15.7%}
+td{
+  height:23px;
+  padding:1px 6px;
+  vertical-align:middle;
+  overflow:hidden;
+  white-space:nowrap;
+  border:0;
+}
+
+/* Excel'deki medium/thin hücre duvarları */
+.btM{border-top:var(--medium) solid var(--line)!important}
+.brM{border-right:var(--medium) solid var(--line)!important}
+.bbM{border-bottom:var(--medium) solid var(--line)!important}
+.blM{border-left:var(--medium) solid var(--line)!important}
+.btT{border-top:var(--thin) solid var(--line)!important}
+.brT{border-right:var(--thin) solid var(--line)!important}
+.bbT{border-bottom:var(--thin) solid var(--line)!important}
+.blT{border-left:var(--thin) solid var(--line)!important}
+
+.title{
+  text-align:center;
+  background:#fff;
+  font-weight:400;
+}
+.label,.head{background:var(--purple)}
+.label{text-align:right}
+.head{text-align:center}
+.input-cell{background:var(--green);padding:0}
+.calc{
+  background:var(--orange);
+  text-align:center;
+  font-variant-numeric:tabular-nums
+}
+.money{text-align:right;padding-right:8px}
+.rate{text-align:center}
+.spacer{height:23px}
+.note{
+  background:var(--note);
+  text-align:center;
+  vertical-align:top;
+}
+input{
+  width:100%;
+  height:100%;
+  min-height:22px;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:1px 6px;
+  font:inherit;
+  color:#111;
+  text-align:right;
+}
+.add{
+  width:100%;
+  height:100%;
+  min-height:22px;
+  border:0;
+  background:transparent;
+  font:inherit;
+  color:#111;
+  text-align:right;
+  padding:1px 6px;
+  cursor:pointer;
+}
+.add:hover{text-decoration:underline}
+
+@media(max-width:560px){
+  body{padding:12px}
+  .sheet{width:100%}
+  td,input,.add{font-size:14px}
+}
+</style>
 </head>
+
 <body>
-<table cellspacing="0" cellpadding="0" class="t1">
-  <tbody>
+
+<div class="sheet">
+
+  <table id="commissionTable" aria-label="Komisyon Hesaplama">
+    <colgroup>
+      <col class="c1">
+      <col class="c2">
+      <col class="c3">
+      <col class="c4">
+      <col class="c5">
+    </colgroup>
+
     <tr>
-      <td colspan="5" valign="middle" class="td1">
-        <p class="p1"><span class="s1">Komisyon Hesaplama</span></p>
+      <td colspan="5" class="title blM btM brM">
+        Komisyon Hesaplama
       </td>
     </tr>
+
     <tr>
-      <td valign="middle" class="td2">
-        <p class="p2"><span class="s1"></span><br></p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p1"><span class="s1">Tutar</span></p>
-      </td>
-      <td valign="middle" class="td4">
-        <p class="p1"><span class="s1">Komisyon</span></p>
-      </td>
-      <td colspan="2" valign="middle" class="td5">
-        <p class="p1"><span class="s1">Komisyonlu Tutar</span></p>
+      <td class="label blM btM bbM"></td>
+      <td class="head blM brT btM bbM">Tutar</td>
+      <td class="head blT brT btM bbM">Komisyon</td>
+      <td colspan="2" class="head blT brM btM bbM">
+        Komisyonlu Tutar
       </td>
     </tr>
+
+    <tbody id="productRows">
+
+      <tr class="product-row first-product">
+        <td class="label product-name blM brM btM bbT">
+          Ürün 1
+        </td>
+
+        <td class="input-cell btM bbT">
+          <input class="amount" inputmode="decimal">
+        </td>
+
+        <td class="calc commission money blT brT btM bbT">
+          0,00
+        </td>
+
+        <td colspan="2" class="calc total money blT brM btM bbT">
+          0,00
+        </td>
+      </tr>
+
+      <tr class="product-row">
+        <td class="label product-name blM brM btT bbT">
+          Ürün 2
+        </td>
+
+        <td class="input-cell btT bbT">
+          <input class="amount" inputmode="decimal">
+        </td>
+
+        <td class="calc commission money blT brT btT bbT">
+          0,00
+        </td>
+
+        <td colspan="2" class="calc total money blT brM btT bbT">
+          0,00
+        </td>
+      </tr>
+
+      <tr class="product-row">
+        <td class="label product-name blM brM btT bbT">
+          Ürün 3
+        </td>
+
+        <td class="input-cell btT bbT">
+          <input class="amount" inputmode="decimal">
+        </td>
+
+        <td class="calc commission money blT brT btT bbT">
+          0,00
+        </td>
+
+        <td colspan="2" class="calc total money blT brM btT bbT">
+          0,00
+        </td>
+      </tr>
+
+    </tbody>
+
+    <tr id="addRow">
+      <td class="label blM brM btT bbT">
+        <button class="add" type="button" id="addProduct">
+          Ürün Ekle
+        </button>
+      </td>
+
+      <td class="input-cell btT bbT"></td>
+
+      <td class="calc blT brT btT bbT"></td>
+
+      <td colspan="2" class="calc blT brM btT bbT"></td>
+    </tr>
+
     <tr>
-      <td valign="middle" class="td6">
-        <p class="p3"><span class="s1">Ürün 1</span></p>
+      <td class="label blM brM btM bbM">
+        Toplam :
       </td>
-      <td valign="middle" class="td7">
-        <p class="p4"><span class="s1">asdasd</span></p>
+
+      <td class="calc money brT btM bbM" id="sumAmount">
+        0,00
       </td>
-      <td valign="middle" class="td8">
-        <p class="p3"><span class="s1">0,00</span></p>
+
+      <td class="calc money blT brT btM bbM" id="sumCommission">
+        0,00
       </td>
-      <td colspan="2" valign="middle" class="td9">
-        <p class="p3"><span class="s1">0,00</span></p>
+
+      <td colspan="2" class="calc money blT brM btM bbM" id="sumTotal">
+        0,00
       </td>
     </tr>
+
     <tr>
-      <td valign="middle" class="td10">
-        <p class="p3"><span class="s1">Ürün 2</span></p>
+      <td class="label blM brM btM bbM">
+        Komisyon :
       </td>
-      <td valign="middle" class="td11">
-        <p class="p5"><span class="s1"></span><br></p>
+
+      <td class="input-cell brM btM bbM">
+        <input id="commissionInput" inputmode="decimal">
       </td>
-      <td valign="middle" class="td12">
-        <p class="p3"><span class="s1">0,00</span></p>
+
+      <td class="label blM brM btM bbM">
+        Oran :
       </td>
-      <td colspan="2" valign="middle" class="td13">
-        <p class="p3"><span class="s1">0,00</span></p>
+
+      <td colspan="2" class="calc rate blM brM btM bbM" id="commissionRate">
+        0
       </td>
     </tr>
+
+  </table>
+
+  <div class="spacer"></div>
+
+  <table aria-label="Havale Hesaplama">
+
+    <colgroup>
+      <col class="c1">
+      <col class="c2">
+      <col class="c3">
+      <col class="c4">
+      <col class="c5">
+    </colgroup>
+
     <tr>
-      <td valign="middle" class="td10">
-        <p class="p3"><span class="s1">Ürün 3</span></p>
-      </td>
-      <td valign="middle" class="td11">
-        <p class="p5"><span class="s1"></span><br></p>
-      </td>
-      <td valign="middle" class="td12">
-        <p class="p3"><span class="s1">0,00</span></p>
-      </td>
-      <td colspan="2" valign="middle" class="td13">
-        <p class="p3"><span class="s1">0,00</span></p>
+      <td colspan="5" class="title blM btM brM">
+        Havale Hesaplama
       </td>
     </tr>
+
     <tr>
-      <td valign="middle" class="td10">
-        <p class="p3"><span class="s1">Ürün Ekle</span></p>
+
+      <td class="label blM brM btM bbM">
+        Normal Tutar
       </td>
-      <td valign="middle" class="td11">
-        <p class="p5"><span class="s1"></span><br></p>
+
+      <td class="input-cell btM bbM">
+        <input id="normalAmount" inputmode="decimal">
       </td>
-      <td valign="middle" class="td14">
-        <p class="p6"><span class="s1"></span><br></p>
+
+      <td class="label blM brM btM bbM">
+        İndirimli Tutar
       </td>
-      <td colspan="2" valign="middle" class="td15">
-        <p class="p6"><span class="s1"></span><br></p>
+
+      <td class="input-cell btM bbM">
+        <input id="discountAmount" inputmode="decimal">
+      </td>
+
+      <td class="calc money blT brM btM bbM" id="transferResult">
+        0,00
+      </td>
+
+    </tr>
+
+  </table>
+
+  <div class="spacer"></div>
+
+  <table aria-label="Bilgi">
+
+    <colgroup>
+      <col class="c1">
+      <col class="c2">
+      <col class="c3">
+      <col class="c4">
+      <col class="c5">
+    </colgroup>
+
+    <tr>
+      <td colspan="5" class="note blM brM btM bbM">
+        Sadece Yeşil Hücreler Doldurma&nbsp; Alanlarıdır
       </td>
     </tr>
-    <tr>
-      <td valign="middle" class="td16">
-        <p class="p3"><span class="s1">Toplam :</span></p>
-      </td>
-      <td valign="middle" class="td17">
-        <p class="p3"><span class="s1">0,00</span></p>
-      </td>
-      <td valign="middle" class="td18">
-        <p class="p3"><span class="s1">0,00</span></p>
-      </td>
-      <td colspan="2" valign="middle" class="td19">
-        <p class="p3"><span class="s1">0,00</span></p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td16">
-        <p class="p3"><span class="s1">Komisyon :</span></p>
-      </td>
-      <td valign="middle" class="td20">
-        <p class="p5"><span class="s1"></span><br></p>
-      </td>
-      <td valign="middle" class="td21">
-        <p class="p3"><span class="s1">Oran :</span></p>
-      </td>
-      <td colspan="2" valign="middle" class="td22">
-        <p class="p1"><span class="s1">0</span></p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<p class="p5"><span class="s1"></span><br></p>
-<table cellspacing="0" cellpadding="0" class="t1">
-  <tbody>
-    <tr>
-      <td colspan="5" valign="middle" class="td1">
-        <p class="p1"><span class="s1">Havale Hesaplama</span></p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td16">
-        <p class="p3"><span class="s1">Normal Tutar</span></p>
-      </td>
-      <td valign="middle" class="td23">
-        <p class="p5"><span class="s1"></span><br></p>
-      </td>
-      <td valign="middle" class="td21">
-        <p class="p3"><span class="s1">İndirimli Tutar</span></p>
-      </td>
-      <td valign="middle" class="td24">
-        <p class="p5"><span class="s1"></span><br></p>
-      </td>
-      <td valign="middle" class="td25">
-        <p class="p3"><span class="s1">0,00</span></p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<p class="p5"><span class="s1"></span><br></p>
-<table cellspacing="0" cellpadding="0" class="t1">
-  <tbody>
-    <tr>
-      <td colspan="5" valign="top" class="td26">
-        <p class="p1"><span class="s1">Sadece Yeşil Hücreler Doldurma  Alanlarıdır</span></p>
-      </td>
-    </tr>
-  </tbody>
-</table>
+
+  </table>
+
+</div>
+
+<script>
+const trNumber = new Intl.NumberFormat('tr-TR',{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+});
+
+function parseNum(v){
+
+  v = String(v ?? '')
+    .trim()
+    .replace(/\s/g,'');
+
+  if(!v) return 0;
+
+  if(v.includes(',') && v.includes('.')){
+    v = v.replace(/\./g,'').replace(',','.');
+  }
+  else if(v.includes(',')){
+    v = v.replace(',','.');
+  }
+
+  const n = Number(v);
+
+  return Number.isFinite(n) ? n : 0;
+}
+
+function fmt(n){
+  return trNumber.format(
+    Number.isFinite(n) ? n : 0
+  );
+}
+
+function calculateCommission(){
+
+  const rows = [
+    ...document.querySelectorAll('.product-row')
+  ];
+
+  const amounts = rows.map(row =>
+    parseNum(
+      row.querySelector('.amount').value
+    )
+  );
+
+  const totalAmount = amounts.reduce(
+    (a,b) => a+b,
+    0
+  );
+
+  const commissionTotal = parseNum(
+    document.getElementById('commissionInput').value
+  );
+
+  const rate = totalAmount
+    ? commissionTotal / totalAmount
+    : 0;
+
+  let sumCommission = 0;
+  let sumTotal = 0;
+
+  rows.forEach((row,i)=>{
+
+    const commission = amounts[i] * rate;
+    const total = amounts[i] + commission;
+
+    sumCommission += commission;
+    sumTotal += total;
+
+    row.querySelector('.commission').textContent =
+      fmt(commission);
+
+    row.querySelector('.total').textContent =
+      fmt(total);
+
+  });
+
+  document.getElementById('sumAmount').textContent =
+    fmt(totalAmount);
+
+  document.getElementById('sumCommission').textContent =
+    fmt(sumCommission);
+
+  document.getElementById('sumTotal').textContent =
+    fmt(sumTotal);
+
+  document.getElementById('commissionRate').textContent =
+    rate
+      ? String(
+          Math.round(rate * 1000000) / 1000000
+        ).replace('.',',')
+      : '0';
+}
+
+function calculateTransfer(){
+
+  const normal = parseNum(
+    document.getElementById('normalAmount').value
+  );
+
+  const discount = parseNum(
+    document.getElementById('discountAmount').value
+  );
+
+  document.getElementById('transferResult').textContent =
+    fmt(
+      discount
+        ? (normal * normal / discount)
+        : 0
+    );
+}
+
+function bindInputs(){
+
+  document
+    .querySelectorAll('.amount')
+    .forEach(input => {
+      input.oninput = calculateCommission;
+    });
+
+}
+
+function makeProductRow(n){
+
+  const row = document.createElement('tr');
+
+  row.className = 'product-row';
+
+  row.innerHTML = `
+    <td class="label product-name blM brM btT bbT">
+      Ürün ${n}
+    </td>
+
+    <td class="input-cell btT bbT">
+      <input class="amount" inputmode="decimal">
+    </td>
+
+    <td class="calc commission money blT brT btT bbT">
+      0,00
+    </td>
+
+    <td colspan="2" class="calc total money blT brM btT bbT">
+      0,00
+    </td>
+  `;
+
+  return row;
+}
+
+bindInputs();
+
+document
+  .getElementById('commissionInput')
+  .addEventListener(
+    'input',
+    calculateCommission
+  );
+
+document
+  .getElementById('normalAmount')
+  .addEventListener(
+    'input',
+    calculateTransfer
+  );
+
+document
+  .getElementById('discountAmount')
+  .addEventListener(
+    'input',
+    calculateTransfer
+  );
+
+document
+  .getElementById('addProduct')
+  .addEventListener('click',()=>{
+
+    const body =
+      document.getElementById('productRows');
+
+    const n =
+      body.querySelectorAll('.product-row').length + 1;
+
+    const row =
+      makeProductRow(n);
+
+    body.appendChild(row);
+
+    bindInputs();
+
+    row.querySelector('input').focus();
+
+    calculateCommission();
+
+  });
+
+calculateCommission();
+calculateTransfer();
+</script>
+
 </body>
 </html>
