@@ -2,6 +2,7 @@
 <input id=a placeholder="Normal fiyat">
 <input id=b placeholder="İndirimli fiyat">
 <input id=c placeholder="Sonuç" readonly>
+<span id=o></span>
 <script>
-oninput=()=>c.value=a.value/(b.value/a.value)
+oninput=()=>{o.innerText=((1-b.value/a.value)*100).toFixed(2)+"%";c.value=(a.value/(b.value/a.value)).toFixed(2)}
 </script>
