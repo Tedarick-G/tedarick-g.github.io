@@ -2563,8 +2563,399 @@ function downloadTableCSV(){
   );
 }
 
+function exportCellValue(
+  col,
+  u,
+  ts,
+  aide,
+  i,
+  cfg
+){
+  switch(col.type){
+
+    case'index':
+      return i+1;
+
+    case'image':
+      return u[col.field]||'';
+
+    case'sku':
+      return u[col.field]||'';
+
+    case'product':
+      return(
+        String(u[col.field]||'')+
+        (
+          u.varyant_adi
+            ?' · '+u.varyant_adi
+            :''
+        )
+      );
+
+    case'text':
+      return u[col.field]??'';
+
+    case'stock':
+      return u[col.field]??'';
+
+    case'aideStock':
+      return aide==null
+        ?''
+        :aide;
+
+    case'tsoft':
+      return ts
+        ?ts[col.field]??''
+        :'';
+
+    case'price':
+      return u[col.field]??'';
+
+    case'tsoftPrice':
+      return ts
+        ?fmtPrice(ts[col.field])
+        :'';
+
+    case'difference':{
+      const pc=
+        (cfg.columns||[])
+          .find(
+            x=>x.type==='price'
+          );
+
+      const tc=
+        (cfg.columns||[])
+          .find(
+            x=>x.type==='tsoftPrice'
+          );
+
+      const a=
+        money(
+          pc
+            ?u[pc.field]
+            :null
+        );
+
+      const b=
+        money(
+          tc&&ts
+            ?ts[tc.field]
+            :null
+        );
+
+      if(!a||!b)
+        return'';
+
+      const p=
+        (b-a)/a*100;
+
+      const abs=
+        Math.abs(p)
+          .toFixed(1)
+          .replace('.',',');
+
+      return `%${abs} ${p>0?'↑':'↓'}`;
+    }
+
+    default:
+      return'';
+  }
+}
+
+async function getBrandDataForExport(
+  sid,
+  b
+){
+  const k=
+    keyOf(
+      sid,
+      b.slug
+    );
+
+  let data=
+    brandData.get(k);
+
+  if(data?.urunler){
+    return{
+      ...data,
+      urunler:dedupe(
+        data.urunler
+      )
+    };
+  }
+
+  try{
+    data=
+      await sourceKvGet(
+        sid,
+        b.slug
+      );
+  }catch(e){
+    console.warn(
+      `${sid}:${b.slug}`,
+      e.message
+    );
+
+    return null;
+  }
+
+  if(!data?.urunler)
+    return null;
+
+  data={
+    ...data,
+    urunler:dedupe(
+      data.urunler
+    )
+  };
+
+  brandData.set(
+    k,
+    data
+  );
+
+  return data;
+}
+
+function downloadCSVText(
+  text,
+  filename
+){
+  const blob=
+    new Blob(
+      [
+        '\uFEFF'+text
+      ],
+      {
+        type:'text/csv;charset=utf-8;'
+      }
+    );
+
+  const a=
+    document.createElement('a');
+
+  a.href=
+    URL.createObjectURL(blob);
+
+  a.download=filename;
+
+  a.click();
+
+  setTimeout(
+    ()=>URL.revokeObjectURL(a.href),
+    0
+  );
+}
+
+async function downloadSelectedCSV(){
+  const keys=
+    [...selectedBrands];
+
+  if(!keys.length){
+    setStatus(
+      'marka seçilmedi'
+    );
+
+    return;
+  }
+
+  const groups=[];
+  const headerLabels=[];
+  const seenLabels=
+    new Set();
+
+  let totalProducts=0;
+
+  for(let x=0;x<keys.length;x++){
+    const [
+      sid,
+      ...rest
+    ]=
+      keys[x].split(':');
+
+    const slug=
+      rest.join(':');
+
+    const cfg=
+      supplierConfigs.get(sid);
+
+    const b=
+      (supplierBrands.get(sid)||[])
+        .find(
+          x=>x.slug===slug
+        );
+
+    if(
+      !cfg||
+      !b
+    ){
+      continue;
+    }
+
+    setStatus(
+      `CSV hazırlanıyor ${x+1}/${keys.length} · ${cfg.name} · ${b.name}`
+    );
+
+    const data=
+      await getBrandDataForExport(
+        sid,
+        b
+      );
+
+    if(!data?.urunler?.length)
+      continue;
+
+    const products=
+      data.urunler;
+
+    const brandName=
+      products.find(
+        x=>x.marka_adi
+      )?.marka_adi||
+      b.name;
+
+    const vis=
+      currentVisibility(cfg);
+
+    const cols=
+      cfg.columns.filter(
+        c=>vis[c.id]
+      );
+
+    const view=
+      computeView(
+        products,
+        cfg,
+        brandName
+      );
+
+    for(const c of cols){
+      if(
+        !seenLabels.has(
+          c.label
+        )
+      ){
+        seenLabels.add(
+          c.label
+        );
+
+        headerLabels.push(
+          c.label
+        );
+      }
+    }
+
+    groups.push({
+      sid,
+      b,
+      cfg,
+      data,
+      products,
+      brandName,
+      cols,
+      view
+    });
+
+    totalProducts+=
+      products.length;
+  }
+
+  if(!groups.length){
+    setStatus(
+      'seçili markalarda kayıtlı veri bulunamadı'
+    );
+
+    return;
+  }
+
+  const headers=[
+    'Tedarikçi',
+    'Marka',
+    ...headerLabels
+  ];
+
+  const lines=[
+    headers.map(
+      h=>csvCell(
+        h,
+        ';'
+      )
+    ).join(';')
+  ];
+
+  for(const g of groups){
+
+    for(
+      let i=0;
+      i<g.products.length;
+      i++
+    ){
+      const u=
+        g.products[i];
+
+      const ts=
+        g.view.matches[i];
+
+      const aide=
+        aideStok(
+          ts,
+          g.cfg
+        );
+
+      const values={
+        'Tedarikçi':
+          g.cfg.name,
+
+        'Marka':
+          g.brandName
+      };
+
+      for(const c of g.cols){
+        values[c.label]=
+          exportCellValue(
+            c,
+            u,
+            ts,
+            aide,
+            i,
+            g.cfg
+          );
+      }
+
+      lines.push(
+        headers.map(
+          h=>
+            csvCell(
+              values[h]??'',
+              ';'
+            )
+        ).join(';')
+      );
+    }
+  }
+
+  downloadCSVText(
+    lines.join('\r\n'),
+    'tum-markalar.csv'
+  );
+
+  setStatus(
+    `${groups.length} marka · ${totalProducts} ürün CSV olarak kaydedildi`
+  );
+}
+
 $('save-table-btn').onclick=
-  downloadTableCSV;
+  async()=>{
+    if(
+      multiMode&&
+      selectedBrands.size
+    ){
+      await downloadSelectedCSV();
+      return;
+    }
+
+    downloadTableCSV();
+  };
 
 document.addEventListener(
   'click',
