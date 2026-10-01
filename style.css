@@ -31,7 +31,8 @@ button,
 input,
 select,
 textarea{
-  font:inherit
+  font-family:var(--font);
+  font-size:12px
 }
 
 button{
@@ -51,6 +52,9 @@ button:disabled{
   opacity:.35;
   cursor:not-allowed
 }
+
+
+/* ÜST BUTONLAR */
 
 #brand-row{
   display:flex;
@@ -143,19 +147,23 @@ button:disabled{
   color:#fff
 }
 
+
+/* MARKA BAŞLIK ALANI */
+
 #toolbar{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-bottom:12px
+  margin-bottom:14px;
+  position:relative
 }
 
 #brand-title{
   flex:1;
   text-align:center;
   font-weight:500;
-  letter-spacing:.04em;
-  font-size:14px
+  letter-spacing:.05em;
+  font-size:15px
 }
 
 #status{
@@ -172,6 +180,10 @@ button:disabled{
   cursor:pointer
 }
 
+#notice:hover{
+  background:#fff8d6
+}
+
 .new-badge{
   display:inline-block;
   padding:1px 6px;
@@ -181,11 +193,17 @@ button:disabled{
   margin-left:6px
 }
 
+
+/* GENEL */
+
 .hidden,
 .col-hidden,
 .row-hidden{
   display:none!important
 }
+
+
+/* PROGRESS */
 
 #multi-progress{
   padding:8px 0;
@@ -215,6 +233,9 @@ button:disabled{
   margin-top:6px
 }
 
+
+/* CHECKBOX / KOLON SEÇİMLERİ */
+
 #sticky-header{
   position:sticky;
   top:0;
@@ -225,8 +246,10 @@ button:disabled{
 #col-toggles{
   display:flex;
   flex-wrap:wrap;
+  align-items:center;
   gap:8px 16px;
   padding:8px 0;
+  font-family:var(--font);
   font-size:11px;
   color:var(--muted);
   border-bottom:1px solid var(--border)
@@ -236,12 +259,28 @@ button:disabled{
   display:flex;
   align-items:center;
   gap:4px;
+  cursor:pointer;
+  white-space:nowrap;
+  font-family:var(--font);
+  font-size:11px;
+  line-height:13px
+}
+
+#col-toggles input[type="checkbox"]{
+  appearance:auto;
+  -webkit-appearance:checkbox;
+  width:13px;
+  height:13px;
+  min-width:13px;
+  margin:0;
+  padding:0;
+  vertical-align:middle;
+  accent-color:#ff6666;
   cursor:pointer
 }
 
-#col-toggles input{
-  accent-color:#ff6666
-}
+
+/* TABLO */
 
 #table-wrap{
   overflow-x:auto
@@ -250,75 +289,150 @@ button:disabled{
 table{
   width:100%;
   border-collapse:collapse;
-  table-layout:auto
+  table-layout:auto;
+  font-family:var(--font);
+  font-size:13px
 }
 
 th,
 td{
-  padding:4px 9px;
+  padding:2px 10px;
   border-bottom:1px solid var(--border);
   white-space:nowrap;
-  text-align:center
+  text-align:center;
+  width:1%;
+  font-family:var(--font);
+  font-size:13px;
+  font-weight:400;
+  line-height:normal
 }
 
 th{
   color:var(--muted);
   font-weight:400;
   font-size:11px;
-  letter-spacing:.04em;
+  letter-spacing:.05em;
   border-bottom:2px solid var(--border);
   position:sticky;
   top:var(--sticky-h,0px);
   background:var(--bg);
   z-index:5;
-  padding-top:12px;
-  padding-bottom:12px
+  padding-top:14px;
+  padding-bottom:14px;
+  text-align:center
 }
 
 tr:hover td{
   background:#f4f4f2
 }
 
-.product-cell{
+
+/* ÜRÜN ADI — COMPEL STANDARDI */
+
+td[data-col="product"]{
   text-align:left;
-  min-width:220px
+  width:auto
+}
+
+td[data-col="tsoftProduct"]{
+  text-align:right;
+  width:auto
+}
+
+th[data-col="product"],
+th[data-col="tsoftProduct"]{
+  text-align:center;
+  width:auto
+}
+
+.product-cell{
+  width:auto
 }
 
 .product-name{
-  max-width:340px;
-  display:inline-block
+  max-width:280px;
+  display:inline-block;
+  vertical-align:bottom;
+  color:inherit;
+  text-decoration:none
 }
+
+
+/* STOKLAR ORTALI */
+
+td[data-col="sourceStock"],
+td[data-col="aideStock"],
+td[data-col="tsoftStock"]{
+  text-align:center
+}
+
+
+/* FİYATLAR SAĞA */
+
+td.num,
+td[data-col="sourcePrice"],
+td[data-col="usd"],
+td[data-col="eur"],
+td[data-col="tsoftPrice"]{
+  text-align:right
+}
+
+
+/* FARK ORTALI */
+
+td[data-col="difference"]{
+  text-align:center
+}
+
+
+/* COMPEL'DEKİ BÖLÜM AYRAÇLARI */
+
+th[data-col="image"],
+td[data-col="image"],
+th[data-col="sourceStock"],
+td[data-col="sourceStock"],
+th[data-col="sourcePrice"],
+td[data-col="sourcePrice"],
+th[data-col="ean"],
+td[data-col="ean"]{
+  border-left:2px solid var(--border)
+}
+
+
+/* GÖRSELLER */
 
 .thumb{
   width:28px;
   height:28px;
   object-fit:contain;
   display:block;
-  margin:auto;
+  margin:0 auto;
   transition:transform .2s;
   cursor:zoom-in
 }
 
 .thumb:hover{
   transform:scale(3);
-  position:relative;
-  z-index:9
+  z-index:10;
+  position:relative
 }
 
 .no-img{
   width:28px;
   height:28px;
   background:var(--border);
-  margin:auto
+  margin:0 auto
 }
 
-.num{
-  text-align:right
-}
+
+/* STOK DIŞI */
 
 .out td{
-  color:#aaa
+  color:#ccc
 }
+
+
+/* EŞLEŞME RENKLERİ */
 
 .match-none td{
   background:rgba(255,120,120,.035)
@@ -328,6 +442,9 @@ tr:hover td{
   background:rgba(120,255,150,.025)
 }
 
+
+/* FİYAT FARKI */
+
 .diff-up{
   color:#d84646;
   font-weight:500
@@ -336,6 +453,9 @@ tr:hover td{
 .diff-down{
   color:var(--text)
 }
+
+
+/* LİNKLER */
 
 a{
   color:inherit;
@@ -350,6 +470,9 @@ a{
   text-decoration:underline
 }
 
+
+/* SATIR SEÇİMİ */
+
 #main-table tbody tr.sel td{
   background:#f4f4f2!important;
   border-top:2px solid #ef4444;
@@ -363,6 +486,9 @@ a{
 #main-table tbody tr.sel td:last-child{
   border-right:2px solid #ef4444
 }
+
+
+/* EŞLEŞMEYENLER */
 
 #unmatched{
   margin-top:22px
@@ -392,18 +518,26 @@ a{
 
 .unmatched-col h3{
   text-align:center;
-  font-size:13px;
+  font-size:15px;
   font-weight:500;
-  margin-bottom:7px
+  letter-spacing:.05em;
+  color:var(--text);
+  margin-bottom:8px
+}
+
+.unmatched-col table{
+  font-size:13px
 }
 
 .unmatched-col th{
   position:static;
-  padding:6px
+  padding:2px 10px;
+  font-size:11px
 }
 
 .unmatched-col td{
-  padding:5px
+  padding:2px 10px;
+  font-size:13px
 }
 
 .unmatched-col input,
@@ -413,13 +547,18 @@ a{
   padding:5px 6px;
   border:1px solid var(--border);
   background:var(--surface);
-  color:var(--text)
+  color:var(--text);
+  font-family:var(--font);
+  font-size:12px
 }
+
+
+/* MODAL */
 
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.35);
+  background:rgba(0,0,0,.3);
   z-index:100;
   display:flex;
   align-items:center;
@@ -440,6 +579,8 @@ a{
 .modal-inner textarea{
   width:100%;
   height:200px;
+  font-family:var(--font);
+  font-size:12px;
   border:1px solid var(--border);
   padding:8px;
   resize:vertical;
@@ -453,6 +594,9 @@ a{
   margin-top:8px;
   justify-content:flex-end
 }
+
+
+/* DARK MODE */
 
 body.dark-mode{
   --bg:#111;
@@ -486,6 +630,10 @@ body.dark-mode #notice{
   border-color:#6a5b20
 }
 
+body.dark-mode #notice:hover{
+  background:#332c12
+}
+
 body.dark-mode .pbar{
   background:#333
 }
@@ -501,6 +649,9 @@ body.dark-mode .match-none td{
 body.dark-mode .match-ok td{
   background:#151b15
 }
+
+
+/* MOBİL */
 
 @media(max-width:900px){
 
