@@ -148,7 +148,7 @@ button:disabled{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-bottom:14px;
+  margin-bottom:8px;
   position:relative
 }
 
@@ -172,6 +172,10 @@ button:disabled{
   background:#fffbea;
   font-size:12px;
   cursor:pointer
+}
+
+#notice:hover{
+  background:#fff8d6
 }
 
 .new-badge{
@@ -217,8 +221,6 @@ button:disabled{
   margin-top:6px
 }
 
-/* CHECKBOX ALANI */
-
 #sticky-header{
   position:sticky;
   top:0;
@@ -230,11 +232,11 @@ button:disabled{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
-  gap:8px 16px;
-  padding:4px 0 3px;
+  gap:6px 16px;
+  padding:3px 0 5px;
+  margin:0;
   font-family:var(--font);
   font-size:11px;
-  line-height:13px;
   color:var(--muted);
   border-bottom:1px solid var(--border)
 }
@@ -262,8 +264,8 @@ button:disabled{
   border:1px solid #888;
   border-radius:2px;
   background:var(--surface);
-  position:relative;
-  cursor:pointer
+  cursor:pointer;
+  position:relative
 }
 
 #col-toggles input[type="checkbox"]:checked{
@@ -272,18 +274,15 @@ button:disabled{
 }
 
 #col-toggles input[type="checkbox"]:checked::after{
-  content:"";
+  content:"✓";
   position:absolute;
-  left:3px;
-  top:1px;
-  width:3px;
-  height:6px;
-  border:solid #fff;
-  border-width:0 2px 2px 0;
-  transform:rotate(45deg)
+  left:1px;
+  top:-3px;
+  color:#fff;
+  font-size:12px;
+  font-weight:500;
+  line-height:13px
 }
-
-/* TABLO */
 
 #table-wrap{
   overflow-x:auto;
@@ -307,7 +306,8 @@ td{
   width:1%;
   font-family:var(--font);
   font-size:13px;
-  font-weight:400
+  font-weight:400;
+  line-height:16px
 }
 
 th{
@@ -317,124 +317,39 @@ th{
   letter-spacing:.05em;
   border-bottom:2px solid var(--border);
   position:sticky;
-  top:var(--sticky-h,0px);
   background:var(--bg);
   z-index:5;
-  height:31px;
-  padding-top:5px;
-  padding-bottom:5px;
+  padding:8px 10px;
   text-align:center
 }
 
-/* Satır yüksekliği iki tedarikçide de sabit */
+tbody tr{
+  height:32px
+}
 
-#main-table tbody td{
-  height:33px
+tbody td{
+  height:32px
 }
 
 tr:hover td{
   background:#f4f4f2
 }
 
-/* ORTAK HİZALAMA */
-
-/* sıra */
-
-td[data-col="index"],
-th[data-col="index"]{
-  text-align:center
-}
-
-/* görsel */
-
-td[data-col="image"],
-th[data-col="image"]{
-  text-align:center
-}
-
-/* SKU */
-
-td[data-col="sku"],
-th[data-col="sku"]{
-  text-align:center
-}
-
-/* ürün */
-
 td[data-col="product"]{
   text-align:left;
   width:auto
 }
-
-th[data-col="product"]{
-  text-align:center;
-  width:auto
-}
-
-/* T-Soft ürün */
 
 td[data-col="tsoftProduct"]{
   text-align:right;
   width:auto
 }
 
+th[data-col="product"],
 th[data-col="tsoftProduct"]{
   text-align:center;
   width:auto
 }
-
-/* kategori */
-
-td[data-col="category"],
-th[data-col="category"]{
-  text-align:center
-}
-
-/* stoklar */
-
-td[data-col="sourceStock"],
-td[data-col="aideStock"],
-td[data-col="tsoftStock"],
-th[data-col="sourceStock"],
-th[data-col="aideStock"],
-th[data-col="tsoftStock"]{
-  text-align:center
-}
-
-/* fiyatlar */
-
-td[data-col="sourcePrice"],
-td[data-col="usd"],
-td[data-col="eur"],
-td[data-col="tsoftPrice"],
-td.num{
-  text-align:right
-}
-
-th[data-col="sourcePrice"],
-th[data-col="usd"],
-th[data-col="eur"],
-th[data-col="tsoftPrice"]{
-  text-align:center
-}
-
-/* fark */
-
-td[data-col="difference"],
-th[data-col="difference"]{
-  text-align:center
-}
-
-/* ean / barkod */
-
-td[data-col="ean"],
-td[data-col="barcode"],
-th[data-col="ean"],
-th[data-col="barcode"]{
-  text-align:center
-}
-
-/* ÜRÜN ALANLARI */
 
 .product-cell{
   width:auto
@@ -443,12 +358,28 @@ th[data-col="barcode"]{
 .product-name{
   max-width:340px;
   display:inline-block;
-  vertical-align:bottom;
+  vertical-align:middle;
   color:inherit;
   text-decoration:none
 }
 
-/* BÖLÜM AYRAÇLARI */
+td[data-col="sourceStock"],
+td[data-col="aideStock"],
+td[data-col="tsoftStock"]{
+  text-align:center
+}
+
+td.num,
+td[data-col="sourcePrice"],
+td[data-col="usd"],
+td[data-col="eur"],
+td[data-col="tsoftPrice"]{
+  text-align:right
+}
+
+td[data-col="difference"]{
+  text-align:center
+}
 
 th[data-col="image"],
 td[data-col="image"],
@@ -460,8 +391,6 @@ th[data-col="ean"],
 td[data-col="ean"]{
   border-left:2px solid var(--border)
 }
-
-/* GÖRSELLER */
 
 .thumb{
   width:28px;
@@ -484,10 +413,6 @@ td[data-col="ean"]{
   height:28px;
   background:var(--border);
   margin:0 auto
-}
-
-.num{
-  text-align:right
 }
 
 .out td{
@@ -538,8 +463,6 @@ a{
   border-right:2px solid #ef4444
 }
 
-/* EŞLEŞMEYENLER */
-
 #unmatched{
   margin-top:22px
 }
@@ -575,15 +498,17 @@ a{
   margin-bottom:8px
 }
 
+.unmatched-col table{
+  font-size:13px
+}
+
 .unmatched-col th{
   position:static;
-  height:auto;
   padding:2px 10px;
   font-size:11px
 }
 
 .unmatched-col td{
-  height:auto;
   padding:2px 10px;
   font-size:13px
 }
@@ -599,8 +524,6 @@ a{
   font-family:var(--font);
   font-size:12px
 }
-
-/* MODAL */
 
 .modal{
   position:fixed;
@@ -642,8 +565,6 @@ a{
   justify-content:flex-end
 }
 
-/* DARK */
-
 body.dark-mode{
   --bg:#111;
   --surface:#191919;
@@ -676,6 +597,10 @@ body.dark-mode #notice{
   border-color:#6a5b20
 }
 
+body.dark-mode #notice:hover{
+  background:#332c12
+}
+
 body.dark-mode .pbar{
   background:#333
 }
@@ -693,8 +618,8 @@ body.dark-mode .match-ok td{
 }
 
 body.dark-mode #col-toggles input[type="checkbox"]{
-  background:#191919;
-  border-color:#aaa
+  background:var(--surface);
+  border-color:#888
 }
 
 body.dark-mode #col-toggles input[type="checkbox"]:checked{
