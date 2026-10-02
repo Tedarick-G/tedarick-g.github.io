@@ -99,7 +99,7 @@
       "id": "aideStock",
       "label": "Aide Stok",
       "type": "aideStock",
-      "visible": true
+      "visible": false
     },
     {
       "id": "tsoftStock",
