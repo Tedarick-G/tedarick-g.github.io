@@ -1,4 +1,5 @@
 const REGISTRY_URL='suppliers/suppliers.json';
+const COLS_VERSION=2;
 
 let registry=null;
 let storageWorker='';
@@ -361,7 +362,6 @@ function renderSuppliers(){
       );
 
     b.textContent=c.name||s.id;
-
     b.disabled=!c.ready;
 
     b.title=c.ready
@@ -444,7 +444,6 @@ function renderBrands(){
         btn.classList.add('multi-selected');
 
       btn.dataset.key=key;
-
       btn.title=`${c.name} · ${b.name}`;
 
       btn.innerHTML=
@@ -1550,11 +1549,14 @@ function currentVisibility(cfg){
   let saved={};
 
   try{
-    saved=JSON.parse(
+    const raw=JSON.parse(
       localStorage.getItem(
         `cols:${cfg.id}`
       )||'{}'
     );
+
+    if(raw.__v===COLS_VERSION)
+      saved=raw;
   }catch{}
 
   return Object.fromEntries(
@@ -1572,7 +1574,10 @@ function currentVisibility(cfg){
 function saveVisibility(cfg,vis){
   localStorage.setItem(
     `cols:${cfg.id}`,
-    JSON.stringify(vis)
+    JSON.stringify({
+      ...vis,
+      __v:COLS_VERSION
+    })
   );
 }
 
