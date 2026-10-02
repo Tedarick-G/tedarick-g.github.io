@@ -1,5 +1,4 @@
 const REGISTRY_URL='suppliers/suppliers.json';
-const COLS_VERSION=2;
 
 let registry=null;
 let storageWorker='';
@@ -362,6 +361,7 @@ function renderSuppliers(){
       );
 
     b.textContent=c.name||s.id;
+
     b.disabled=!c.ready;
 
     b.title=c.ready
@@ -444,6 +444,7 @@ function renderBrands(){
         btn.classList.add('multi-selected');
 
       btn.dataset.key=key;
+
       btn.title=`${c.name} · ${b.name}`;
 
       btn.innerHTML=
@@ -1549,14 +1550,11 @@ function currentVisibility(cfg){
   let saved={};
 
   try{
-    const raw=JSON.parse(
+    saved=JSON.parse(
       localStorage.getItem(
         `cols:${cfg.id}`
       )||'{}'
     );
-
-    if(raw.__v===COLS_VERSION)
-      saved=raw;
   }catch{}
 
   return Object.fromEntries(
@@ -1574,10 +1572,7 @@ function currentVisibility(cfg){
 function saveVisibility(cfg,vis){
   localStorage.setItem(
     `cols:${cfg.id}`,
-    JSON.stringify({
-      ...vis,
-      __v:COLS_VERSION
-    })
+    JSON.stringify(vis)
   );
 }
 
@@ -1742,6 +1737,15 @@ function cellHTML(
         ts
           ?esc(ts[col.field]??'-')
           :'-';
+
+      if(
+        ts&&
+        col.field==='Stok'&&
+        !activeRow(ts)
+      ){
+        html+=
+          ` <span class="inactive-mark" title="T-Soft'ta pasif">!</span>`;
+      }
 
       if(col.field==='Ürün Adı')
         cls='product-cell';
@@ -2527,8 +2531,17 @@ function downloadTableCSV(){
             `[data-col="${CSS.escape(c.id)}"]`
           );
 
+        const clone=
+          td?.cloneNode(true);
+
+        clone
+          ?.querySelectorAll('.inactive-mark')
+          .forEach(
+            x=>x.remove()
+          );
+
         return(
-          `"${String(td?.textContent||'')
+          `"${String(clone?.textContent||'')
             .replace(/\s+/g,' ')
             .trim()
             .replace(/"/g,'""')}"`
