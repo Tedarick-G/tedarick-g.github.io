@@ -398,14 +398,17 @@ td[data-col="ean"]{
   object-fit:contain;
   display:block;
   margin:0 auto;
-  transition:transform .2s;
-  cursor:zoom-in
+  transition:transform .08s ease-out;
+  transform-origin:left center;
+  cursor:zoom-in;
+  position:relative;
+  background:var(--bg)
 }
 
 .thumb:hover{
-  transform:scale(3);
-  z-index:10;
-  position:relative
+  transform:scale(7);
+  z-index:50;
+  box-shadow:0 1px 4px rgba(0,0,0,.15)
 }
 
 .no-img{
@@ -640,4 +643,345 @@ body.dark-mode #col-toggles input[type="checkbox"]:checked{
   main{
     padding:12px
   }
+}
+
+.stock-need{
+  color:rgba(216,70,70,.55);
+  font-size:.85em;
+  font-weight:600;
+  margin-left:6px;
+  white-space:nowrap
+}
+
+.stock-alert{
+  color:#e00000;
+  font-weight:900;
+  font-size:1.15em;
+  margin-left:3px;
+  animation:stock-blink 1s steps(2,start) infinite
+}
+
+@keyframes stock-blink{
+  to{visibility:hidden}
+}
+
+.inactive-mark{
+  display:inline-block;
+  margin-left:4px;
+  padding:0 4px;
+  border-radius:3px;
+  font-size:.75em;
+  font-weight:700;
+  color:#fff;
+  background:#999;
+  vertical-align:middle
+}
+
+.stock-num{
+  display:inline-block
+}
+
+.stock-marks{
+  display:inline-block;
+  white-space:nowrap
+}
+
+.stock-ghost{
+  visibility:hidden
+}
+
+.stock-ghost .stock-alert{
+  animation:none
+}
+
+th,
+td{
+  padding-left:6px!important;
+  padding-right:6px!important
+}
+
+td[data-col="product"],
+td[data-col="tsoftProduct"],
+th[data-col="product"],
+th[data-col="tsoftProduct"]{
+  width:auto!important;
+  padding-left:10px!important;
+  padding-right:10px!important
+}
+
+.copyable.copied{
+  background:rgba(239,68,68,.15);
+  border-radius:3px
+}
+
+td .copyable:hover{
+  text-decoration:none;
+  background:rgba(0,0,0,.05);
+  border-radius:3px
+}
+
+#urgent{
+  width:fit-content;
+  max-width:100%;
+  margin:10px auto 14px;
+  border:1px solid #e0e0d8;
+  border-radius:6px;
+  background:var(--surface)
+}
+
+#urgent.hidden{
+  display:none
+}
+
+.urgent-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 10px;
+  border-bottom:1px solid var(--border);
+  color:#e00000
+}
+
+.urgent-head{
+  cursor:pointer;
+  user-select:none;
+  gap:16px
+}
+
+.urgent-toggle{
+  width:10px;
+  height:10px;
+  padding:0;
+  margin:4px 4px 0;
+  border:none;
+  border-left:2px solid #e00000;
+  border-top:2px solid #e00000;
+  border-right:none;
+  border-bottom:none;
+  background:transparent!important;
+  box-shadow:none;
+  border-radius:0;
+  min-width:0;
+  cursor:pointer;
+  transform:rotate(45deg);
+  transition:transform .2s
+}
+
+.urgent-scroll{
+  transition:max-height .25s ease
+}
+
+#urgent.collapsed .urgent-scroll{
+  max-height:0!important;
+  overflow:hidden
+}
+
+#urgent.collapsed .urgent-head{
+  border-bottom:none
+}
+
+#urgent.collapsed .urgent-toggle{
+  margin-top:-4px;
+  transform:rotate(225deg)
+}
+
+.urgent-scroll{
+  max-height:360px;
+  overflow:auto
+}
+
+#urgent table{
+  width:auto
+}
+
+#urgent th,
+#urgent td{
+  white-space:nowrap!important;
+  width:auto!important
+}
+
+#urgent th{
+  position:sticky;
+  top:0;
+  z-index:2
+}
+
+#urgent td.urgent-name{
+  text-align:left
+}
+
+#urgent .thumb{
+  transform-origin:left top
+}
+
+#urgent tr.urgent-up td:nth-child(7){
+  color:#e00000
+}
+
+.urgent-head{
+  position:relative;
+  justify-content:center;
+  color:#444
+}
+
+.urgent-head .urgent-toggle{
+  position:absolute;
+  right:12px;
+  top:50%;
+  margin:-3px 0 0
+}
+
+#urgent.collapsed .urgent-head .urgent-toggle{
+  margin-top:-8px
+}
+
+#urgent,
+#urgent .urgent-head,
+#urgent .stock-alert,
+#urgent tr.urgent-up td:nth-child(7){
+  color:#444!important
+}
+
+#urgent .stock-alert{
+  animation:none
+}
+
+#urgent .urgent-toggle{
+  border-left-color:#444!important;
+  border-top-color:#444!important
+}
+
+#urgent .copyable.copied{
+  background:rgba(0,0,0,.08)
+}
+
+td.names-cell{
+  width:100%!important;
+  max-width:0;
+  white-space:nowrap!important;
+  padding-left:10px!important;
+  padding-right:10px!important
+}
+
+td.names-cell .names{
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:space-between;
+  align-items:center;
+  column-gap:24px;
+  width:100%
+}
+
+td.names-cell .names > span{
+  flex:0 1 auto;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+td.names-cell .names > span[data-col="product"]{
+  text-align:left
+}
+
+td.names-cell .names > span[data-col="tsoftProduct"]{
+  text-align:right;
+  margin-left:auto
+}
+
+td.names-cell .product-name,
+td.names-cell .copyable{
+  display:inline;
+  max-width:none
+}
+
+td.names-cell .names > span.col-hidden{
+  display:none!important
+}
+
+th[data-col="product"]{
+  text-align:left!important
+}
+
+th[data-col="tsoftProduct"]{
+  text-align:right!important
+}
+
+td[data-col="tsoftStock"]{
+  text-align:left!important
+}
+
+td[data-col="tsoftStock"] .stock-num{
+  display:inline-block;
+  min-width:4ch;
+  text-align:right
+}
+
+td[data-col="tsoftStock"] .stock-marks{
+  display:inline-block;
+  text-align:left
+}
+
+td[data-col="tsoftStock"] .stock-need{
+  margin-left:4px
+}
+
+th[data-col="sourceStock"],
+th[data-col="aideStock"],
+th[data-col="tsoftStock"]{
+  white-space:nowrap!important;
+  letter-spacing:0
+}
+
+th[data-col="sourceStock"],
+td[data-col="sourceStock"],
+th[data-col="aideStock"],
+td[data-col="aideStock"],
+th[data-col="tsoftStock"],
+td[data-col="tsoftStock"]{
+  padding-left:4px!important;
+  padding-right:4px!important
+}
+
+#brand-search-wrap{
+  flex:1 1 240px;
+  display:flex;
+  justify-content:flex-start;
+  min-width:240px
+}
+
+#brand-search{
+  width:220px;
+  padding:6px 10px;
+  border:1px solid var(--border);
+  border-radius:0;
+  background:var(--surface);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:12px;
+  outline:none
+}
+
+#brand-search:focus{
+  border-color:#888
+}
+
+.brand-btn.search-hidden{
+  display:none!important
+}
+
+#search-line{
+  flex:1 1 auto;
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+#search-line #brand-search-wrap{
+  flex:1 1 auto;
+  min-width:236px
+}
+
+#search-line #data-inputs{
+  margin-left:0
 }
