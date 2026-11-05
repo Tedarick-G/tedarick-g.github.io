@@ -484,7 +484,139 @@ function renderBrands(){
   }
 
   updateAllButton();
+  filterBrands();
 }
+
+function searchNorm(v){
+  return String(v||'')
+    .toLocaleLowerCase('tr')
+    .replace(/ı/g,'i')
+    .replace(/[Øø]/g,'o')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function brandSearchBox(){
+  let inp=$('brand-search');
+
+  if(!inp){
+    inp=document.createElement('input');
+    inp.id='brand-search';
+    inp.type='search';
+    inp.placeholder='Marka ara...';
+    inp.autocomplete='off';
+    inp.spellcheck=false;
+
+    const wrap=document.createElement('div');
+    wrap.id='brand-search-wrap';
+    wrap.appendChild(inp);
+
+    const di=$('data-inputs');
+    const line=document.createElement('div');
+    line.id='search-line';
+    di.before(line);
+    line.append(wrap,di);
+
+    if(window.ResizeObserver){
+      new ResizeObserver(positionSearch).observe($('brand-row'));
+    }
+
+    inp.addEventListener('input',filterBrands);
+
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){
+        inp.value='';
+        filterBrands();
+      }else if(e.key==='Enter'){
+        const first=[...brandList.querySelectorAll('.brand-btn')]
+          .find(b=>!b.classList.contains('search-hidden'));
+
+        first?.click();
+      }
+    });
+  }
+
+  return inp;
+}
+
+function filterBrands(){
+  const q=searchNorm(brandSearchBox().value);
+
+  brandList.querySelectorAll('.brand-btn').forEach(b=>{
+    const name=searchNorm(b.querySelector('.brand-name')?.textContent);
+
+    b.classList.toggle(
+      'search-hidden',
+      !!q&&!name.includes(q)
+    );
+  });
+
+  positionSearch();
+}
+
+function positionSearch(){
+  const wrap=$('brand-search-wrap');
+  const inp=$('brand-search');
+  const row=$('brand-row');
+
+  if(!wrap||!inp||!row)return;
+
+  const line=$('search-line');
+
+  const place=()=>{
+    inp.style.marginLeft='0px';
+
+    const w=wrap.getBoundingClientRect();
+    const r=row.getBoundingClientRect();
+    const iw=inp.getBoundingClientRect().width;
+
+    const want=r.left+r.width/2-iw/2;
+    const left=Math.min(Math.max(want,w.left),w.right-iw);
+
+    inp.style.marginLeft=Math.max(0,left-w.left)+'px';
+
+    return Math.abs(left-want)<1;
+  };
+
+  if(line)line.style.flexBasis='';
+
+  if(!place()&&line){
+    line.style.flexBasis='100%';
+    place();
+  }
+}
+
+window.addEventListener('resize',positionSearch);
+
+document.addEventListener('keydown',e=>{
+  if(
+    e.ctrlKey||e.metaKey||e.altKey||
+    e.key.length!==1
+  ){
+    return;
+  }
+
+  const t=document.activeElement;
+
+  if(
+    t&&(
+      t.isContentEditable||
+      /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)
+    )
+  ){
+    return;
+  }
+
+  if(document.querySelector('.modal:not(.hidden)'))return;
+
+  const inp=brandSearchBox();
+
+  inp.value='';
+  filterBrands();
+  inp.focus();
+});
 
 function clearActive(){
   activeSupplier=null;
@@ -500,6 +632,7 @@ function clearActive(){
 
   $('unmatched').classList.add('hidden');
   notice.classList.add('hidden');
+  urgentBox().classList.add('hidden');
 }
 
 function keyOf(sid,slug){
@@ -1608,7 +1741,7 @@ function renderColumns(cfg){
 
     ch.type='checkbox';
     ch.checked=!!vis[c.id];
-    ch.dataset.col=c.id;
+    ch.dataset.toggle=c.id;
 
     ch.onchange=()=>{
       vis[c.id]=ch.checked;
@@ -1617,6 +1750,14 @@ function renderColumns(cfg){
         cfg,
         vis
       );
+
+      if(
+        (c.id==='product'||c.id==='tsoftProduct')&&
+        activeSupplier
+      ){
+        renderCurrent();
+        return;
+      }
 
       document
         .querySelectorAll(
@@ -1663,6 +1804,63 @@ function tsoftUrl(ts){
   return s
     ?`https://www.sescibaba.com/${s}`
     :'';
+}
+
+function stockReq(u,aide,cfg){
+  const sc=(cfg?.columns||[]).find(c=>c.type==='stock');
+  const sup=Math.max(0,Number(sc&&u?u[sc.field]:0)||0);
+  const ai=Math.max(0,Number(aide)||0);
+
+  return{
+    sup,
+    ai,
+    req:ai+(sup>0?Math.ceil(sup/2):0)
+  };
+}
+
+function stockInfo(u,ts,aide,cfg){
+  if(!aideData||!ts)return null;
+
+  const{sup,ai,req}=stockReq(u,aide,cfg);
+  const cur=Math.max(0,parseInt(String(ts.Stok??'').trim(),10)||0);
+  const d=req-cur;
+
+  return{
+    sup,
+    ai,
+    req,
+    cur,
+    d,
+    alert:
+      (d>0&&cur===0)||
+      (d<0&&req===0)
+  };
+}
+
+function stockNeed(u,ts,aide,cfg){
+  const x=stockInfo(u,ts,aide,cfg);
+
+  if(!x||!x.d)return '';
+
+  const{sup,ai,req,d,alert}=x;
+
+  return(
+    `<span class="stock-need" title="Gereken: ${req} (Aide ${ai} + ${sup>0?'⌈'+sup+'/2⌉':'0'})">${d>0?'+':'-'}${Math.abs(d)}</span>`+
+    (alert?`<span class="stock-alert" title="${d>0?'Stok var, sitede bitik':'Stok yok, sitede satışta'}">!</span>`:'')
+  );
+}
+
+function stockCell(num,marks,ts){
+  const p=
+    activeRow(ts)
+      ?''
+      :`<span class="inactive-mark" title="T-Soft'ta pasif">P</span>`;
+
+  return(
+    marks||p
+      ?`<span class="stock-num">${num}</span><span class="stock-marks">${marks}${p}</span>`
+      :`<span class="stock-num">${num}</span><span class="stock-marks"></span>`
+  );
 }
 
 function cellHTML(
@@ -1740,11 +1938,9 @@ function cellHTML(
 
       if(
         ts&&
-        col.field==='Stok'&&
-        !activeRow(ts)
+        col.field==='Stok'
       ){
-        html+=
-          ` <span class="inactive-mark" title="T-Soft'ta pasif">!</span>`;
+        html=stockCell(html,stockNeed(u,ts,aide,cfg),ts);
       }
 
       if(col.field==='Ürün Adı')
@@ -1753,10 +1949,10 @@ function cellHTML(
       break;
 
     case'price':
-      html=sourcePriceLink(
-        u,
-        u[col.field]
-      );
+      html=
+        col.id==='sourcePrice'
+          ?sourcePriceLink(u,u[col.field])
+          :esc(u[col.field]||'-');
 
       cls='num';
       break;
@@ -1829,9 +2025,56 @@ function cellHTML(
     }
   }
 
+  const copy=cellCopy(col,u,ts,aide,i,cfg);
+
+  if(copy!=null&&copy!==''&&(html!=='-'||col.type==='difference')){
+    html=
+      `<span class="copyable" data-copy="${esc(copy)}">${html}</span>`;
+  }
+
   return(
     `<td data-col="${esc(col.id)}" class="${cls}">${html}</td>`
   );
+}
+
+function cellCopy(col,u,ts,aide,i,cfg){
+  switch(col.type){
+    case'index':
+      return ts?.['Tedarikçi Ürün Kodu']||'';
+
+    case'image':
+      return u[col.field]||'';
+
+    case'sku':
+    case'product':
+      return null;
+
+    case'text':
+    case'stock':
+      return u[col.field]??'';
+
+    case'aideStock':
+      return aide??'';
+
+    case'tsoft':
+      if(!ts)return '';
+
+      if(col.field==='Stok')
+        return String(stockReq(u,aide,cfg).req);
+
+      return ts[col.field]??'';
+
+    case'price':
+      return col.id==='sourcePrice'
+        ?null
+        :u[col.field]??'';
+
+    case'difference':
+      return ts?.['Tedarikçi Ürün Kodu']||'';
+
+    default:
+      return null;
+  }
 }
 
 function computeView(
@@ -1884,6 +2127,154 @@ function computeView(
     sourceOnly,
     tsoftOnly
   };
+}
+
+let urgentCollapsed=false;
+
+try{
+  urgentCollapsed=localStorage.getItem('urgentCollapsed')==='1';
+}catch{}
+
+function urgentBox(){
+  let box=$('urgent');
+
+  if(!box){
+    box=document.createElement('div');
+    box.id='urgent';
+    box.className='hidden';
+    toolbar.parentNode.insertBefore(box,toolbar);
+  }
+
+  return box;
+}
+
+function renderUrgent(products,view,cfg){
+  const box=urgentBox();
+  const list=[];
+
+  products.forEach((u,i)=>{
+    const ts=view.matches[i];
+    const aide=aideStok(ts,cfg);
+    const x=stockInfo(u,ts,aide,cfg);
+
+    if(x?.alert)list.push({u,ts,x});
+  });
+
+  view.tsoftOnly.forEach(ts=>{
+    const x=stockInfo(null,ts,aideStok(ts,cfg),cfg);
+
+    if(x?.alert)list.push({u:null,ts,x});
+  });
+
+  if(!list.length){
+    box.classList.add('hidden');
+    box.innerHTML='';
+    return;
+  }
+
+  const imgCol=(cfg.columns||[]).find(c=>c.type==='image');
+  const nameCol=(cfg.columns||[]).find(c=>c.type==='product');
+
+  const cp=v=>
+    v==null||v===''
+      ?'-'
+      :`<span class="copyable" data-copy="${esc(v)}">${esc(v)}</span>`;
+
+  box.innerHTML=
+    `<div class="urgent-head">
+      <strong>Acil düzeltilecekler <span class="stock-alert">!</span> · ${list.length} ürün</strong>
+      <button class="urgent-toggle" title="Daralt / Aç"></button>
+    </div>
+    <div class="urgent-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Sıra</th>
+          <th>Görsel</th>
+          <th>${esc(cfg.name)} Ürün Adı</th>
+          <th>T-Soft Ürün Adı</th>
+          <th>Tedarikçi Ürün Kodu</th>
+          <th>Şu anki Stok</th>
+          <th>Olması Gereken</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${list.map(({u,ts,x},n)=>{
+          const img=u&&imgCol?u[imgCol.field]:'';
+
+          return `<tr class="${x.d>0?'urgent-up':'urgent-down'}">
+            <td>${ts['Tedarikçi Ürün Kodu']?`<span class="copyable" data-copy="${esc(ts['Tedarikçi Ürün Kodu'])}">${n+1}</span>`:n+1}</td>
+            <td>${img?`<img class="thumb" src="${esc(img)}" loading="lazy">`:'<div class="no-img"></div>'}</td>
+            <td class="urgent-name">${u&&nameCol?cp(u[nameCol.field]):'-'}</td>
+            <td class="urgent-name">${cp(ts['Ürün Adı'])}</td>
+            <td>${cp(ts['Tedarikçi Ürün Kodu'])}</td>
+            <td>${cp(ts.Stok)}</td>
+            <td><strong>${cp(String(x.req))}</strong></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    </div>`;
+
+  box.querySelector('.urgent-head').onclick=()=>{
+    urgentCollapsed=!urgentCollapsed;
+
+    try{
+      localStorage.setItem('urgentCollapsed',urgentCollapsed?'1':'0');
+    }catch{}
+
+    box.classList.toggle('collapsed',urgentCollapsed);
+  };
+
+  box.classList.toggle('collapsed',urgentCollapsed);
+  box.classList.remove('hidden');
+}
+
+function namesMerged(cfg){
+  const cols=cfg.columns||[];
+  const a=cols.findIndex(c=>c.id==='product');
+  const b=cols.findIndex(c=>c.id==='tsoftProduct');
+
+  if(a<0||b!==a+1)return false;
+
+  const vis=currentVisibility(cfg);
+
+  return !!(vis.product&&vis.tsoftProduct);
+}
+
+function rowCells(cfg,u,ts,aide,i){
+  const merge=namesMerged(cfg);
+  let out='';
+
+  for(const c of cfg.columns){
+    if(merge&&c.id==='tsoftProduct')continue;
+
+    if(merge&&c.id==='product'){
+      const tc=cfg.columns.find(x=>x.id==='tsoftProduct');
+      const asSpan=(h,t)=>
+        h.replace(/^<td /,`<span title="${esc(t||'')}" `).replace(/<\/td>$/,'</span>');
+
+      const pt=
+        (u[c.field]||'')+
+        (u.varyant_adi?' · '+u.varyant_adi:'');
+
+      const tt=
+        ts?.[tc.field]||'';
+
+      out+=
+        `<td class="names-cell" colspan="2"><div class="names">${
+          asSpan(cellHTML(c,u,ts,aide,i,cfg),pt)
+        }${
+          asSpan(cellHTML(tc,u,ts,aide,i,cfg),tt)
+        }</div></td>`;
+
+      continue;
+    }
+
+    out+=cellHTML(c,u,ts,aide,i,cfg);
+  }
+
+  return out;
 }
 
 function renderCurrent(){
@@ -1956,25 +2347,15 @@ function renderCurrent(){
             )
               ?'1'
               :'0'
-          }">${
-            cfg.columns.map(
-              c=>
-                cellHTML(
-                  c,
-                  u,
-                  ts,
-                  aide,
-                  i,
-                  cfg
-                )
-            ).join('')
-          }</tr>`
+          }">${rowCells(cfg,u,ts,aide,i)}</tr>`
         );
       }
     ).join('');
 
   applySavedVisibility(cfg);
   applyRowFilters();
+
+  renderUrgent(products,view,cfg);
 
   renderUnmatched(
     view.sourceOnly,
@@ -2201,7 +2582,7 @@ function renderUnmatched(
                   </td>
 
                   <td>
-                    ${esc(r.Stok||'-')}
+                    ${stockCell(esc(r.Stok||'-'),stockNeed(null,r,aideStok(r,cfg),cfg),r)}
                   </td>
 
                   <td>
@@ -2535,7 +2916,7 @@ function downloadTableCSV(){
           td?.cloneNode(true);
 
         clone
-          ?.querySelectorAll('.inactive-mark')
+          ?.querySelectorAll('.stock-marks,.inactive-mark,.stock-need,.stock-alert')
           .forEach(
             x=>x.remove()
           );
@@ -2975,6 +3356,31 @@ $('save-table-btn').onclick=
     downloadTableCSV();
   };
 
+function copyText(t,el){
+  const done=()=>{
+    el?.classList.add('copied');
+    setTimeout(()=>el?.classList.remove('copied'),600);
+    setStatus(`Kopyalandı: ${t}`);
+  };
+
+  const fallback=()=>{
+    const ta=document.createElement('textarea');
+    ta.value=t;
+    ta.style.position='fixed';
+    ta.style.opacity='0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{document.execCommand('copy');done();}catch{}
+    ta.remove();
+  };
+
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(t).then(done,fallback);
+  }else{
+    fallback();
+  }
+}
+
 document.addEventListener(
   'click',
   e=>{
@@ -2982,9 +3388,7 @@ document.addEventListener(
       e.target.closest('.copyable');
 
     if(cp?.dataset.copy){
-      navigator.clipboard.writeText(
-        cp.dataset.copy
-      );
+      copyText(cp.dataset.copy,cp);
 
       return;
     }
@@ -3082,6 +3486,8 @@ async function init(){
     await ensureSelectedBrandsLoaded();
 
     renderBrands();
+
+    brandSearchBox().focus();
 
     await loadGlobalData();
 
