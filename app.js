@@ -1377,6 +1377,26 @@ async function loadTsoft(
 ){
   const p=parseCSV(text);
 
+  {
+    const seen=new Set();
+    const key=
+      p.headers.includes('Web Servis Kodu')
+        ?r=>String(r['Web Servis Kodu']||'').trim()||JSON.stringify(r)
+        :r=>JSON.stringify(r);
+
+    const before=p.rows.length;
+
+    p.rows=p.rows.filter(r=>{
+      const k=key(r);
+      if(seen.has(k))return false;
+      seen.add(k);
+      return true;
+    });
+
+    if(p.rows.length<before)
+      console.log(`T-Soft: ${before-p.rows.length} tekrar eden satır atlandı`);
+  }
+
   tsoftData={
     ...p,
     text,
