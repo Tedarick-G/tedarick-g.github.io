@@ -1883,6 +1883,22 @@ function stockCell(num,marks,ts){
   );
 }
 
+function discBadge(u,ts,cfg){
+  const reg=money(u?.guncel_fiyat);
+  const cur=money(u?.indirimli_fiyat);
+
+  if(!reg||!cur||cur>=reg)return '';
+
+  const pct=Math.round((reg-cur)/reg*100);
+  const tc=(cfg?.columns||[]).find(c=>c.type==='tsoftPrice');
+  const own=money(tc&&ts?ts[tc.field]:null);
+  const cheaper=own!=null&&cur<own;
+
+  return(
+    `<span class="disc-badge${cheaper?' disc-cheaper':''}" title="Compel'de %${pct} indirimde: ${esc(u.indirimli_fiyat)}${cheaper?' · bizim fiyattan ucuz':''}">%${pct}</span>`
+  );
+}
+
 function cellHTML(
   col,
   u,
@@ -1971,7 +1987,7 @@ function cellHTML(
     case'price':
       html=
         col.id==='sourcePrice'
-          ?sourcePriceLink(u,u[col.field])
+          ?sourcePriceLink(u,u[col.field])+discBadge(u,ts,cfg)
           :esc(u[col.field]||'-');
 
       cls='num';
@@ -2866,7 +2882,7 @@ function downloadTableCSV(){
           td?.cloneNode(true);
 
         clone
-          ?.querySelectorAll('.stock-marks,.inactive-mark,.stock-need,.stock-alert')
+          ?.querySelectorAll('.stock-marks,.inactive-mark,.stock-need,.stock-alert,.disc-badge')
           .forEach(
             x=>x.remove()
           );
