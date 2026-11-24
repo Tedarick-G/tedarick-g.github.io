@@ -1,110 +1,1005 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Tedarikçi Yönetimi</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
 
-<body>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
 
-<div id="data-modal" class="modal hidden">
-  <div class="modal-inner">
-    <p id="data-modal-title"></p>
+:root{
+  --bg:#f8f8f6;
+  --surface:#fff;
+  --border:#e0e0d8;
+  --text:#111;
+  --muted:#888;
+  --font:'DM Mono',monospace
+}
 
-    <div class="modal-actions">
-      <button id="data-modal-existing"></button>
-      <button id="data-modal-new"></button>
-      <button id="data-modal-cancel">İptal</button>
-    </div>
-  </div>
-</div>
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  font-size:13px;
+  min-height:100vh
+}
 
-<div id="aide-modal" class="modal hidden">
-  <div class="modal-inner">
-    <textarea
-      id="aide-paste"
-      placeholder="Aide verisini buraya yapıştırın..."
-    ></textarea>
+main{
+  padding:20px
+}
 
-    <div class="modal-actions">
-      <button id="aide-load">Yükle</button>
-      <button id="aide-close">Kapat</button>
-    </div>
-  </div>
-</div>
+button,
+input,
+select,
+textarea{
+  font-family:var(--font);
+  font-size:12px
+}
 
-<main>
+button{
+  padding:5px 12px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s
+}
 
-  <div id="brand-row">
+button:hover{
+  background:var(--border)
+}
 
-    <div id="supplier-list"></div>
+button:disabled{
+  opacity:.35;
+  cursor:not-allowed
+}
 
-    <div id="brand-list"></div>
+#brand-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  margin-bottom:14px
+}
 
-    <div id="data-inputs">
-      <button id="mode-btn">Mod</button>
-      <button id="btn-select">Seç</button>
+#supplier-list,
+#brand-list{
+  display:contents
+}
 
-      <button id="tsoft-btn">T-Soft</button>
+#supplier-list .supplier-btn:last-child{
+  margin-right:8px
+}
 
-      <input
-        type="file"
-        id="tsoft-file"
-        accept=".csv"
-        hidden
-      >
+#data-inputs{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:auto;
+  flex-shrink:0
+}
 
-      <button id="aide-btn">Aide</button>
-      <button id="btn-refresh">Güncelle</button>
-      <button id="save-table-btn">Kaydet</button>
-    </div>
+.supplier-btn{
+  padding:6px 14px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:12px;
+  letter-spacing:.03em;
+  min-height:30px
+}
 
-  </div>
+.supplier-btn:hover,
+.supplier-btn.active{
+  background:var(--text);
+  color:#fff;
+  border-color:var(--text)
+}
 
-  <div id="toolbar" class="hidden">
-    <span id="brand-title"></span>
-    <span id="status"></span>
-  </div>
+.brand-btn{
+  position:relative;
+  padding:6px 28px 6px 14px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  cursor:pointer;
+  font-size:12px;
+  letter-spacing:.03em;
+  white-space:nowrap;
+  line-height:16px;
+  min-height:30px;
+  height:30px
+}
 
-  <div id="notice" class="hidden"></div>
+.brand-btn:hover,
+.brand-btn.active{
+  background:var(--text);
+  color:#fff;
+  border-color:var(--text)
+}
 
-  <div id="multi-progress" class="hidden">
+.brand-btn.multi-selected{
+  outline:2px solid #ef4444;
+  outline-offset:1px
+}
 
-    <div class="pbar">
-      <span id="general-bar"></span>
-    </div>
+.brand-name{
+  vertical-align:middle;
+  margin-right:8px
+}
 
-    <div class="pbar">
-      <span id="brand-bar"></span>
-    </div>
+.brand-favicon{
+  position:absolute;
+  right:13px;
+  top:50%;
+  width:10px;
+  height:10px;
+  object-fit:contain;
+  transform:translateY(-50%) scale(2);
+  transform-origin:center;
+  pointer-events:none
+}
 
-    <div id="multi-log"></div>
+#btn-select.active{
+  background:#111;
+  color:#fff
+}
 
-  </div>
+#toolbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+  position:relative
+}
 
-  <div id="sticky-header">
-    <div id="col-toggles" class="hidden"></div>
-  </div>
+#brand-title{
+  flex:1;
+  text-align:center;
+  font-weight:500;
+  letter-spacing:.05em;
+  font-size:15px
+}
 
-  <div id="table-wrap" class="hidden">
+#status{
+  font-size:11px;
+  color:var(--muted)
+}
 
-    <table id="main-table">
+#notice{
+  padding:10px 14px;
+  margin-bottom:12px;
+  border:1px solid #e8c870;
+  background:#fffbea;
+  font-size:12px;
+  cursor:pointer
+}
 
-      <thead id="table-head"></thead>
+#notice:hover{
+  background:#fff8d6
+}
 
-      <tbody id="tbody"></tbody>
+.new-badge{
+  display:inline-block;
+  padding:1px 6px;
+  background:#111;
+  color:#fff;
+  font-size:10px;
+  margin-left:6px
+}
 
-    </table>
+.hidden,
+.col-hidden,
+.row-hidden{
+  display:none!important
+}
 
-  </div>
+#multi-progress{
+  padding:8px 0;
+  width:100%
+}
 
-  <div id="unmatched" class="hidden"></div>
+.pbar{
+  height:8px;
+  background:#ddd;
+  border-radius:9px;
+  overflow:hidden;
+  margin:6px 0;
+  width:100%
+}
 
-</main>
+.pbar>span{
+  display:block;
+  height:100%;
+  width:0;
+  background:#111;
+  transition:.25s
+}
 
-<script src="app.js"></script>
+#multi-log{
+  font-size:11px;
+  line-height:1.5;
+  margin-top:6px
+}
 
-</body>
-</html>
+#sticky-header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:var(--bg)
+}
+
+#col-toggles{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px 16px;
+  padding:3px 0 5px;
+  margin:0;
+  font-family:var(--font);
+  font-size:11px;
+  color:var(--muted);
+  border-bottom:1px solid var(--border)
+}
+
+#col-toggles label{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  white-space:nowrap;
+  font-family:var(--font);
+  font-size:11px;
+  line-height:13px
+}
+
+#col-toggles input[type="checkbox"]{
+  appearance:none;
+  -webkit-appearance:none;
+  width:13px;
+  height:13px;
+  min-width:13px;
+  min-height:13px;
+  margin:0;
+  padding:0;
+  border:1px solid #888;
+  border-radius:2px;
+  background:var(--surface);
+  cursor:pointer;
+  position:relative
+}
+
+#col-toggles input[type="checkbox"]:checked{
+  background:#ff6666;
+  border-color:#ff6666
+}
+
+#col-toggles input[type="checkbox"]:checked::after{
+  content:"✓";
+  position:absolute;
+  left:1px;
+  top:-3px;
+  color:#fff;
+  font-size:12px;
+  font-weight:500;
+  line-height:13px
+}
+
+#table-wrap{
+  overflow-x:auto;
+  margin-top:0
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:auto;
+  font-family:var(--font);
+  font-size:13px
+}
+
+th,
+td{
+  padding:2px 10px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+  text-align:center;
+  width:1%;
+  font-family:var(--font);
+  font-size:13px;
+  font-weight:400;
+  line-height:16px
+}
+
+th{
+  color:var(--muted);
+  font-weight:400;
+  font-size:11px;
+  letter-spacing:.05em;
+  border-bottom:2px solid var(--border);
+  position:sticky;
+  background:var(--bg);
+  z-index:5;
+  padding:8px 10px;
+  text-align:center
+}
+
+tbody tr{
+  height:32px
+}
+
+tbody td{
+  height:32px
+}
+
+tr:hover td{
+  background:#f4f4f2
+}
+
+td[data-col="product"]{
+  text-align:left;
+  width:auto
+}
+
+td[data-col="tsoftProduct"]{
+  text-align:right;
+  width:auto
+}
+
+th[data-col="product"],
+th[data-col="tsoftProduct"]{
+  text-align:center;
+  width:auto
+}
+
+.product-cell{
+  width:auto
+}
+
+.product-name{
+  max-width:340px;
+  display:inline-block;
+  vertical-align:middle;
+  color:inherit;
+  text-decoration:none
+}
+
+td[data-col="sourceStock"],
+td[data-col="aideStock"],
+td[data-col="tsoftStock"]{
+  text-align:center
+}
+
+td.num,
+td[data-col="sourcePrice"],
+td[data-col="usd"],
+td[data-col="eur"],
+td[data-col="tsoftPrice"]{
+  text-align:right
+}
+
+td[data-col="difference"]{
+  text-align:center
+}
+
+th[data-col="image"],
+td[data-col="image"],
+th[data-col="sourceStock"],
+td[data-col="sourceStock"],
+th[data-col="sourcePrice"],
+td[data-col="sourcePrice"],
+th[data-col="ean"],
+td[data-col="ean"]{
+  border-left:2px solid var(--border)
+}
+
+.thumb{
+  width:28px;
+  height:28px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
+  transition:transform .08s ease-out;
+  transform-origin:left center;
+  cursor:zoom-in;
+  position:relative;
+  background:var(--bg)
+}
+
+.thumb:hover{
+  transform:scale(7);
+  z-index:50;
+  box-shadow:0 1px 4px rgba(0,0,0,.15)
+}
+
+.no-img{
+  width:28px;
+  height:28px;
+  background:var(--border);
+  margin:0 auto
+}
+
+.out td{
+  color:#ccc
+}
+
+.match-none td{
+  background:rgba(255,120,120,.035)
+}
+
+.match-ok td{
+  background:rgba(120,255,150,.025)
+}
+
+.diff-up{
+  color:#d84646;
+  font-weight:500
+}
+
+.diff-down{
+  color:var(--text)
+}
+
+a{
+  color:inherit;
+  text-decoration:none
+}
+
+.copyable{
+  cursor:pointer
+}
+
+.copyable:hover{
+  text-decoration:underline
+}
+
+#main-table tbody tr.sel td{
+  background:#f4f4f2!important;
+  border-top:2px solid #ef4444;
+  border-bottom:2px solid #ef4444
+}
+
+#main-table tbody tr.sel td:first-child{
+  border-left:2px solid #ef4444
+}
+
+#main-table tbody tr.sel td:last-child{
+  border-right:2px solid #ef4444
+}
+
+#unmatched{
+  margin-top:22px
+}
+
+.unmatched-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px
+}
+
+.unmatched-head strong{
+  font-size:14px;
+  font-weight:500
+}
+
+.unmatched-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px
+}
+
+.unmatched-col{
+  overflow-x:auto
+}
+
+.unmatched-col h3{
+  text-align:center;
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:.05em;
+  color:var(--text);
+  margin-bottom:8px
+}
+
+.unmatched-col table{
+  font-size:13px
+}
+
+.unmatched-col th{
+  position:static;
+  padding:2px 10px;
+  font-size:11px
+}
+
+.unmatched-col td{
+  padding:2px 10px;
+  font-size:13px
+}
+
+.unmatched-col input,
+.unmatched-col select{
+  width:100%;
+  min-width:145px;
+  padding:5px 6px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:12px
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.3);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.modal-inner{
+  background:var(--surface);
+  padding:16px;
+  width:500px;
+  max-width:90vw
+}
+
+.modal-inner p{
+  margin-bottom:12px
+}
+
+.modal-inner textarea{
+  width:100%;
+  height:200px;
+  font-family:var(--font);
+  font-size:12px;
+  border:1px solid var(--border);
+  padding:8px;
+  resize:vertical;
+  background:var(--surface);
+  color:var(--text)
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+  justify-content:flex-end
+}
+
+body.dark-mode{
+  --bg:#111;
+  --surface:#191919;
+  --border:#3b3b3b;
+  --text:#eee;
+  --muted:#aaa
+}
+
+body.dark-mode .supplier-btn.active,
+body.dark-mode .brand-btn.active,
+body.dark-mode .brand-btn:hover,
+body.dark-mode .supplier-btn:hover{
+  background:#eee;
+  color:#111;
+  border-color:#eee
+}
+
+body.dark-mode #btn-select.active{
+  background:#eee;
+  color:#111
+}
+
+body.dark-mode tr:hover td,
+body.dark-mode #main-table tbody tr.sel td{
+  background:#242424!important
+}
+
+body.dark-mode #notice{
+  background:#292410;
+  border-color:#6a5b20
+}
+
+body.dark-mode #notice:hover{
+  background:#332c12
+}
+
+body.dark-mode .pbar{
+  background:#333
+}
+
+body.dark-mode .pbar>span{
+  background:#eee
+}
+
+body.dark-mode .match-none td{
+  background:#1b1515
+}
+
+body.dark-mode .match-ok td{
+  background:#151b15
+}
+
+body.dark-mode #col-toggles input[type="checkbox"]{
+  background:var(--surface);
+  border-color:#888
+}
+
+body.dark-mode #col-toggles input[type="checkbox"]:checked{
+  background:#ff6666;
+  border-color:#ff6666
+}
+
+@media(max-width:900px){
+
+  #data-inputs{
+    margin-left:auto
+  }
+
+  .unmatched-grid{
+    grid-template-columns:1fr
+  }
+
+  main{
+    padding:12px
+  }
+}
+
+.stock-need{
+  color:rgba(216,70,70,.55);
+  font-size:.85em;
+  font-weight:600;
+  margin-left:6px;
+  white-space:nowrap
+}
+
+.stock-alert{
+  color:#e00000;
+  font-weight:900;
+  font-size:1.15em;
+  margin-left:3px;
+  animation:stock-blink 1s steps(2,start) infinite
+}
+
+@keyframes stock-blink{
+  to{visibility:hidden}
+}
+
+.inactive-mark{
+  display:inline-block;
+  margin-left:4px;
+  padding:0 4px;
+  border-radius:3px;
+  font-size:.75em;
+  font-weight:700;
+  color:#fff;
+  background:#999;
+  vertical-align:middle
+}
+
+.stock-num{
+  display:inline-block
+}
+
+.stock-marks{
+  display:inline-block;
+  white-space:nowrap
+}
+
+.stock-ghost{
+  visibility:hidden
+}
+
+.stock-ghost .stock-alert{
+  animation:none
+}
+
+th,
+td{
+  padding-left:6px!important;
+  padding-right:6px!important
+}
+
+td[data-col="product"],
+td[data-col="tsoftProduct"],
+th[data-col="product"],
+th[data-col="tsoftProduct"]{
+  width:auto!important;
+  padding-left:10px!important;
+  padding-right:10px!important
+}
+
+.copyable.copied{
+  background:rgba(239,68,68,.15);
+  border-radius:3px
+}
+
+td .copyable:hover{
+  text-decoration:none;
+  background:rgba(0,0,0,.05);
+  border-radius:3px
+}
+
+#urgent{
+  width:fit-content;
+  max-width:100%;
+  margin:10px auto 14px;
+  border:1px solid #e0e0d8;
+  border-radius:6px;
+  background:var(--surface)
+}
+
+#urgent.hidden{
+  display:none
+}
+
+.urgent-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 10px;
+  border-bottom:1px solid var(--border);
+  color:#e00000
+}
+
+.urgent-head{
+  cursor:pointer;
+  user-select:none;
+  gap:16px
+}
+
+.urgent-toggle{
+  width:10px;
+  height:10px;
+  padding:0;
+  margin:4px 4px 0;
+  border:none;
+  border-left:2px solid #e00000;
+  border-top:2px solid #e00000;
+  border-right:none;
+  border-bottom:none;
+  background:transparent!important;
+  box-shadow:none;
+  border-radius:0;
+  min-width:0;
+  cursor:pointer;
+  transform:rotate(45deg);
+  transition:transform .2s
+}
+
+.urgent-scroll{
+  transition:max-height .25s ease
+}
+
+#urgent.collapsed .urgent-scroll{
+  max-height:0!important;
+  overflow:hidden
+}
+
+#urgent.collapsed .urgent-head{
+  border-bottom:none
+}
+
+#urgent.collapsed .urgent-toggle{
+  margin-top:-4px;
+  transform:rotate(225deg)
+}
+
+.urgent-scroll{
+  max-height:360px;
+  overflow:auto
+}
+
+#urgent table{
+  width:auto
+}
+
+#urgent th,
+#urgent td{
+  white-space:nowrap!important;
+  width:auto!important
+}
+
+#urgent th{
+  position:sticky;
+  top:0;
+  z-index:2
+}
+
+#urgent td.urgent-name{
+  text-align:left
+}
+
+#urgent .thumb{
+  transform-origin:left top
+}
+
+#urgent tr.urgent-up td:nth-child(7){
+  color:#e00000
+}
+
+.urgent-head{
+  position:relative;
+  justify-content:center;
+  color:#444
+}
+
+.urgent-head .urgent-toggle{
+  position:absolute;
+  right:12px;
+  top:50%;
+  margin:-3px 0 0
+}
+
+#urgent.collapsed .urgent-head .urgent-toggle{
+  margin-top:-8px
+}
+
+#urgent,
+#urgent .urgent-head,
+#urgent .stock-alert,
+#urgent tr.urgent-up td:nth-child(7){
+  color:#444!important
+}
+
+#urgent .stock-alert{
+  animation:none
+}
+
+#urgent .urgent-toggle{
+  border-left-color:#444!important;
+  border-top-color:#444!important
+}
+
+#urgent .copyable.copied{
+  background:rgba(0,0,0,.08)
+}
+
+td.names-cell{
+  width:100%!important;
+  max-width:0;
+  white-space:nowrap!important;
+  padding-left:10px!important;
+  padding-right:10px!important
+}
+
+td.names-cell .names{
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:space-between;
+  align-items:center;
+  column-gap:24px;
+  width:100%
+}
+
+td.names-cell .names > span{
+  flex:0 1 auto;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+td.names-cell .names > span[data-col="product"]{
+  text-align:left
+}
+
+td.names-cell .names > span[data-col="tsoftProduct"]{
+  text-align:right;
+  margin-left:auto
+}
+
+td.names-cell .product-name,
+td.names-cell .copyable{
+  display:inline;
+  max-width:none
+}
+
+td.names-cell .names > span.col-hidden{
+  display:none!important
+}
+
+th[data-col="product"]{
+  text-align:left!important
+}
+
+th[data-col="tsoftProduct"]{
+  text-align:right!important
+}
+
+td[data-col="tsoftStock"]{
+  text-align:left!important
+}
+
+td[data-col="tsoftStock"] .stock-num{
+  display:inline-block;
+  min-width:4ch;
+  text-align:right
+}
+
+td[data-col="tsoftStock"] .stock-marks{
+  display:inline-block;
+  text-align:left
+}
+
+td[data-col="tsoftStock"] .stock-need{
+  margin-left:4px
+}
+
+th[data-col="sourceStock"],
+th[data-col="aideStock"],
+th[data-col="tsoftStock"]{
+  white-space:nowrap!important;
+  letter-spacing:0
+}
+
+th[data-col="sourceStock"],
+td[data-col="sourceStock"],
+th[data-col="aideStock"],
+td[data-col="aideStock"],
+th[data-col="tsoftStock"],
+td[data-col="tsoftStock"]{
+  padding-left:4px!important;
+  padding-right:4px!important
+}
+
+#brand-search-wrap{
+  flex:1 1 240px;
+  display:flex;
+  justify-content:flex-start;
+  min-width:240px
+}
+
+#brand-search{
+  width:220px;
+  padding:6px 10px;
+  border:1px solid var(--border);
+  border-radius:0;
+  background:var(--surface);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:12px;
+  outline:none
+}
+
+#brand-search:focus{
+  border-color:#888
+}
+
+.brand-btn.search-hidden{
+  display:none!important
+}
+
+#search-line{
+  flex:1 1 auto;
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+#search-line #brand-search-wrap{
+  flex:1 1 auto;
+  min-width:236px
+}
+
+#search-line #data-inputs{
+  margin-left:0
+}
+
+table.src-only th,
+table.src-only td{
+  white-space:nowrap
+}
+
+table.src-only th:nth-child(-n+3),
+table.src-only td:nth-child(-n+3),
+table.src-only th:nth-child(5),
+table.src-only td:nth-child(5){
+  width:1%!important
+}
+
+table.src-only td:nth-child(4),
+table.src-only th:nth-child(4){
+  width:auto!important;
+  text-align:left!important
+}
