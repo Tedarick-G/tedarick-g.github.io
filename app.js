@@ -2504,11 +2504,8 @@ function renderUnmatched(
   const target=
     manualTarget(cfg);
 
-  const opts=
-    tsoftOnly.map(
-      (r,i)=>
-        `<option value="${i}">${esc(r[target]||'-')} · ${esc(r['Ürün Adı']||'-')}</option>`
-    ).join('');
+  const imgCol=(cfg.columns||[]).find(c=>c.type==='image');
+  const stockCol=(cfg.columns||[]).find(c=>c.type==='stock');
 
   box.innerHTML=
     `<div class="unmatched-head">
@@ -2526,42 +2523,36 @@ function renderUnmatched(
 
           <thead>
             <tr>
+              <th>Sıra</th>
+              <th>Görsel</th>
               <th>SKU</th>
-              <th>Ürün</th>
-              <th>T-Soft Kaydı</th>
-              <th></th>
+              <th>Ürün Adı</th>
+              <th>${esc(stockCol?.label||cfg.name+' Stok')}</th>
             </tr>
           </thead>
 
           <tbody>
 
             ${sourceOnly.map(
-              (u,i)=>
-                `<tr>
-                  <td>${esc(u.sku||'-')}</td>
+              (u,i)=>{
+                const img=imgCol?u[imgCol.field]:'';
+                const name=
+                  (u.urun_adi||'')+
+                  (u.varyant_adi?' · '+u.varyant_adi:'');
+                const stk=stockCol?u[stockCol.field]:'';
+                const c=v=>
+                  v==null||v===''
+                    ?'-'
+                    :`<span class="copyable" data-copy="${esc(v)}">${esc(v)}</span>`;
 
-                  <td class="product-cell">
-                    ${esc(u.urun_adi||'-')}
-                    ${
-                      u.varyant_adi
-                        ?` · ${esc(u.varyant_adi)}`
-                        :''
-                    }
-                  </td>
-
-                  <td>
-                    <select data-source="${i}">
-                      <option value="">Seç...</option>
-                      ${opts}
-                    </select>
-                  </td>
-
-                  <td>
-                    <button class="bind-btn" data-source="${i}">
-                      Bağla
-                    </button>
-                  </td>
-                </tr>`
+                return `<tr>
+                  <td>${i+1}</td>
+                  <td>${img?`<img class="thumb" src="${esc(img)}" loading="lazy">`:'<div class="no-img"></div>'}</td>
+                  <td>${c(u.sku)}</td>
+                  <td class="product-cell">${c(name)}</td>
+                  <td>${c(stk)}</td>
+                </tr>`;
+              }
             ).join('')}
 
           </tbody>
@@ -2636,52 +2627,6 @@ function renderUnmatched(
 
   $('download-tsoft').onclick=
     downloadTsoftCSV;
-
-  box
-    .querySelectorAll('.bind-btn')
-    .forEach(
-      btn=>
-        btn.onclick=async()=>{
-          const i=
-            +btn.dataset.source;
-
-          const sel=
-            box.querySelector(
-              `select[data-source="${i}"]`
-            );
-
-          const j=
-            Number(sel.value);
-
-          if(
-            sel.value===''||
-            !tsoftOnly[j]
-          ){
-            return;
-          }
-
-          const val=
-            manualValue(
-              sourceOnly[i],
-              cfg
-            );
-
-          if(!val){
-            alert('Kaynak kod bulunamadı');
-            return;
-          }
-
-          tsoftOnly[j][target]=val;
-
-          await commitTsoft();
-
-          renderCurrent();
-
-          setStatus(
-            `${target} güncellendi`
-          );
-        }
-    );
 
   box
     .querySelectorAll('.save-ws')
