@@ -1828,8 +1828,11 @@ function tsoftUrl(ts){
 
 function stockReq(u,aide,cfg){
   const sc=(cfg?.columns||[]).find(c=>c.type==='stock');
-  const sup=Math.max(0,Number(sc&&u?u[sc.field]:0)||0);
+  let sup=Math.max(0,Number(sc&&u?u[sc.field]:0)||0);
   const ai=Math.max(0,Number(aide)||0);
+
+  if(u?.on_siparis)
+    sup=Math.max(sup,1);
 
   return{
     sup,
@@ -2379,7 +2382,7 @@ function renderCurrent(){
           );
 
         const out=
-          (Number(u.stok)||0)<=0
+          (Number(u.stok)||0)<=0&&!u.on_siparis
             ?' out'
             :'';
 
