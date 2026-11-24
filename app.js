@@ -2299,6 +2299,17 @@ function rowCells(cfg,u,ts,aide,i){
   return out;
 }
 
+function realProduct(u){
+  if(!u)return false;
+
+  if(/controller=category/i.test(String(u.kategori_adi||'')))
+    return false;
+
+  const empty=v=>v==null||String(v).trim()==='';
+
+  return !(empty(u.sku)&&empty(u.stok)&&empty(u.guncel_fiyat));
+}
+
 function renderCurrent(){
   if(
     !activeSupplier||
@@ -2323,7 +2334,7 @@ function renderCurrent(){
   renderColumns(cfg);
 
   const products=
-    data?.urunler||[];
+    (data?.urunler||[]).filter(realProduct);
 
   const brandName=
     products.find(
@@ -3177,7 +3188,7 @@ async function downloadSelectedCSV(){
       continue;
 
     const products=
-      data.urunler;
+      data.urunler.filter(realProduct);
 
     const brandName=
       products.find(
