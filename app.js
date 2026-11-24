@@ -2581,46 +2581,39 @@ function renderUnmatched(
 
         <h3>T-Soft'ta var · ${esc(cfg.name)}'da yok</h3>
 
-        <table>
+        <table class="ts-only">
 
           <thead>
             <tr>
-              <th>${esc(target)}</th>
-              <th>Ürün</th>
+              <th>Sıra</th>
+              <th>Web Servis Kodu</th>
+              <th>Tedarikçi Ürün Kodu</th>
+              <th>Ürün Adı</th>
               <th>Stok</th>
-              <th></th>
             </tr>
           </thead>
 
           <tbody>
 
-            ${tsoftOnly.map(
-              (r,i)=>
-                `<tr>
+            ${[...tsoftOnly]
+              .sort((a,b)=>
+                (parseInt(b.Stok,10)||0)-(parseInt(a.Stok,10)||0)
+              )
+              .map(
+              (r,i)=>{
+                const c=v=>
+                  v==null||v===''
+                    ?'-'
+                    :`<span class="copyable" data-copy="${esc(v)}">${esc(v)}</span>`;
 
-                  <td>
-                    <input
-                      class="ws-edit"
-                      data-ts="${i}"
-                      value="${esc(r[target]||'')}"
-                    >
-                  </td>
-
-                  <td class="product-cell">
-                    ${esc(r['Ürün Adı']||'-')}
-                  </td>
-
-                  <td>
-                    ${stockCell(esc(r.Stok||'-'),stockNeed(null,r,aideStok(r,cfg),cfg),r)}
-                  </td>
-
-                  <td>
-                    <button class="save-ws" data-ts="${i}">
-                      Kaydet
-                    </button>
-                  </td>
-
-                </tr>`
+                return `<tr>
+                  <td>${i+1}</td>
+                  <td>${c(r['Web Servis Kodu'])}</td>
+                  <td>${c(r['Tedarikçi Ürün Kodu'])}</td>
+                  <td class="product-cell">${c(r['Ürün Adı'])}</td>
+                  <td>${stockCell(esc(r.Stok||'-'),stockNeed(null,r,aideStok(r,cfg),cfg),r)}</td>
+                </tr>`;
+              }
             ).join('')}
 
           </tbody>
@@ -2643,32 +2636,6 @@ function renderUnmatched(
 
   $('download-tsoft').onclick=
     downloadTsoftCSV;
-
-  box
-    .querySelectorAll('.save-ws')
-    .forEach(
-      btn=>
-        btn.onclick=async()=>{
-          const i=
-            +btn.dataset.ts;
-
-          const input=
-            box.querySelector(
-              `.ws-edit[data-ts="${i}"]`
-            );
-
-          tsoftOnly[i][target]=
-            input.value.trim();
-
-          await commitTsoft();
-
-          renderCurrent();
-
-          setStatus(
-            `${target} güncellendi`
-          );
-        }
-    );
 }
 
 function downloadTsoftCSV(){
