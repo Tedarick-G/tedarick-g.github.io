@@ -2519,7 +2519,7 @@ function renderUnmatched(
 
         <h3>${esc(cfg.name)}'da var · T-Soft'ta yok</h3>
 
-        <table>
+        <table class="src-only">
 
           <thead>
             <tr>
@@ -2533,7 +2533,12 @@ function renderUnmatched(
 
           <tbody>
 
-            ${sourceOnly.map(
+            ${[...sourceOnly]
+              .sort((a,b)=>
+                (Number(stockCol?b[stockCol.field]:0)||0)-
+                (Number(stockCol?a[stockCol.field]:0)||0)
+              )
+              .map(
               (u,i)=>{
                 const img=imgCol?u[imgCol.field]:'';
                 const name=
