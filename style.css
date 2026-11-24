@@ -1021,7 +1021,9 @@ table.ts-only th:nth-child(4){
 
 .disc-badge{
   display:inline-block;
-  margin-left:6px;
+  margin-right:6px;
+  cursor:pointer;
+  user-select:none;
   padding:0 4px;
   border-radius:3px;
   font-size:.8em;
@@ -1034,4 +1036,15 @@ table.ts-only th:nth-child(4){
 .disc-badge.disc-cheaper{
   color:#fff;
   background:#e00000
+}
+
+.disc-badge.disc-on{
+  outline:1.5px solid currentColor;
+  outline-offset:-1.5px;
+  background:transparent
+}
+
+.disc-badge.disc-cheaper.disc-on{
+  color:#e00000;
+  background:transparent
 }
