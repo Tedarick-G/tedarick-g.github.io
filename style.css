@@ -1018,3 +1018,20 @@ table.ts-only th:nth-child(4){
   width:auto!important;
   text-align:left!important
 }
+
+.disc-badge{
+  display:inline-block;
+  margin-left:6px;
+  padding:0 4px;
+  border-radius:3px;
+  font-size:.8em;
+  font-weight:600;
+  color:#666;
+  background:rgba(0,0,0,.07);
+  white-space:nowrap
+}
+
+.disc-badge.disc-cheaper{
+  color:#fff;
+  background:#e00000
+}
