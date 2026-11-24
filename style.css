@@ -987,7 +987,9 @@ td[data-col="tsoftStock"]{
 }
 
 table.src-only th,
-table.src-only td{
+table.src-only td,
+table.ts-only th,
+table.ts-only td{
   white-space:nowrap
 }
 
@@ -1000,6 +1002,19 @@ table.src-only td:nth-child(5){
 
 table.src-only td:nth-child(4),
 table.src-only th:nth-child(4){
+  width:auto!important;
+  text-align:left!important
+}
+
+table.ts-only th:nth-child(-n+3),
+table.ts-only td:nth-child(-n+3),
+table.ts-only th:nth-child(5),
+table.ts-only td:nth-child(5){
+  width:1%!important
+}
+
+table.ts-only td:nth-child(4),
+table.ts-only th:nth-child(4){
   width:auto!important;
   text-align:left!important
 }
