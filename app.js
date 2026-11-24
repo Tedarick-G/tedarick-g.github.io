@@ -2070,8 +2070,10 @@ function cellCopy(col,u,ts,aide,i,cfg){
       return null;
 
     case'text':
-    case'stock':
       return u[col.field]??'';
+
+    case'stock':
+      return ts?.['Tedarikçi Ürün Kodu']||(u[col.field]??'');
 
     case'aideStock':
       return aide??'';
