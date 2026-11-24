@@ -1895,7 +1895,7 @@ function discBadge(u,ts,cfg){
   const cheaper=own!=null&&cur<own;
 
   return(
-    `<span class="disc-badge${cheaper?' disc-cheaper':''}" title="Compel'de %${pct} indirimde: ${esc(u.indirimli_fiyat)}${cheaper?' · bizim fiyattan ucuz':''}">%${pct}</span>`
+    `<span class="disc-badge${cheaper?' disc-cheaper':''}" data-reg="${esc(u.guncel_fiyat)}" data-cur="${esc(u.indirimli_fiyat)}" title="Compel'de %${pct} indirimde: ${esc(u.indirimli_fiyat)}${cheaper?' · bizim fiyattan ucuz':''} · tıkla: indirimli/indirimsiz">%${pct}</span>`
   );
 }
 
@@ -1987,7 +1987,7 @@ function cellHTML(
     case'price':
       html=
         col.id==='sourcePrice'
-          ?sourcePriceLink(u,u[col.field])+discBadge(u,ts,cfg)
+          ?discBadge(u,ts,cfg)+`<span class="price-val">${sourcePriceLink(u,u[col.field])}</span>`
           :esc(u[col.field]||'-');
 
       cls='num';
@@ -3350,6 +3350,20 @@ function copyText(t,el){
 document.addEventListener(
   'click',
   e=>{
+    const db=
+      e.target.closest('.disc-badge');
+
+    if(db){
+      const on=db.classList.toggle('disc-on');
+      const pv=db.parentElement?.querySelector('.price-val');
+      const tgt=pv?.querySelector('a')||pv;
+
+      if(tgt)
+        tgt.textContent=on?db.dataset.cur:db.dataset.reg;
+
+      return;
+    }
+
     const cp=
       e.target.closest('.copyable');
 
@@ -3367,7 +3381,7 @@ document.addEventListener(
     if(
       !tr||
       e.target.closest(
-        'a,button,input,select,textarea,.copyable'
+        'a,button,input,select,textarea,.copyable,.disc-badge'
       )
     ){
       return;
