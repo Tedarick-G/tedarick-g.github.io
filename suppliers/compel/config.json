@@ -15,8 +15,11 @@
     "marka_adi",
     "kategori_adi",
     "guncel_fiyat",
+    "indirimli_fiyat",
     "usd_kdv_haric",
+    "indirimli_usd_kdv_haric",
     "eur_kdv_haric",
+    "indirimli_eur_kdv_haric",
     "stok"
   ],
   "match": {
