@@ -1048,3 +1048,14 @@ table.ts-only th:nth-child(4){
   color:#e00000;
   background:transparent
 }
+
+.preorder{
+  display:inline-block;
+  padding:0 4px;
+  border-radius:3px;
+  font-size:.85em;
+  font-weight:600;
+  color:#555;
+  background:rgba(0,0,0,.07);
+  white-space:nowrap
+}
