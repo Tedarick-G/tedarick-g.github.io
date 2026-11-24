@@ -20,7 +20,8 @@
     "indirimli_usd_kdv_haric",
     "eur_kdv_haric",
     "indirimli_eur_kdv_haric",
-    "stok"
+    "stok",
+    "on_siparis"
   ],
   "match": {
     "rules": [
