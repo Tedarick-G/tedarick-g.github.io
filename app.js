@@ -1853,7 +1853,7 @@ function stockInfo(u,ts,aide,cfg){
     d,
     alert:
       (d>0&&cur===0)||
-      (d<0&&req===0)
+      (d<0&&req===0&&!u?.on_siparis)
   };
 }
 
@@ -1952,9 +1952,10 @@ function cellHTML(
       break;
 
     case'stock':
-      html=esc(
-        u[col.field]??'-'
-      );
+      html=
+        u.on_siparis
+          ?'<span class="preorder">Ön Sipariş</span>'
+          :esc(u[col.field]??'-');
 
       cls='source-stock';
       break;
@@ -2582,7 +2583,7 @@ function renderUnmatched(
                   <td>${img?`<img class="thumb" src="${esc(img)}" loading="lazy">`:'<div class="no-img"></div>'}</td>
                   <td>${c(u.sku)}</td>
                   <td class="product-cell">${c(name)}</td>
-                  <td>${c(stk)}</td>
+                  <td>${u.on_siparis?'<span class="preorder">Ön Sipariş</span>':c(stk)}</td>
                 </tr>`;
               }
             ).join('')}
