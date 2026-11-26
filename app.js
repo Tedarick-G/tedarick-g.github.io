@@ -103,20 +103,32 @@ function activeRow(r){
   return v!=='false'&&v!=='0';
 }
 
-function brandEq(a,b){
-  a=normText(a);
-  b=normText(b);
+const BRAND_ALIASES=[
+  ['Rupert Neve Designs','Rupert Neve'],
+  ['Telefunken Elektroakustik','Telefunken'],
+  ['Marantz Professional','Marantz'],
+  ['Denon DJ','Denon']
+];
 
-  return !!a&&!!b&&(
-    a===b||
-    (
-      Math.min(a.length,b.length)>=5&&
-      (
-        a.includes(b)||
-        b.includes(a)
-      )
-    )
-  );
+const brandAliasMap=new Map();
+
+for(const g of BRAND_ALIASES){
+  const k=normText(g[0]);
+
+  for(const n of g)
+    brandAliasMap.set(normText(n),k);
+}
+
+function brandKey(s){
+  const n=normText(s);
+  return brandAliasMap.get(n)||n;
+}
+
+function brandEq(a,b){
+  a=brandKey(a);
+  b=brandKey(b);
+
+  return !!a&&!!b&&a===b;
 }
 
 function productKey(u){
@@ -1891,6 +1903,8 @@ function discBadge(u,ts,cfg){
   const cur=money(u?.indirimli_fiyat);
 
   if(!reg||!cur||cur>=reg)return '';
+
+  if((Number(u?.stok)||0)<=0&&!u?.on_siparis)return '';
 
   const pct=Math.round((reg-cur)/reg*100);
   const tc=(cfg?.columns||[]).find(c=>c.type==='tsoftPrice');
