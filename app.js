@@ -106,8 +106,7 @@ function activeRow(r){
 const BRAND_ALIASES=[
   ['Rupert Neve Designs','Rupert Neve'],
   ['Telefunken Elektroakustik','Telefunken'],
-  ['Marantz Professional','Marantz'],
-  ['Denon DJ','Denon']
+  ['Marantz Professional','Marantz']
 ];
 
 const brandAliasMap=new Map();
@@ -2468,7 +2467,9 @@ function renderCurrent(){
           );
 
         const out=
-          (Number(u.stok)||0)<=0&&!u.on_siparis
+          (Number(u.stok)||0)<=0&&
+          !u.on_siparis&&
+          !((Number(aide)||0)>0)
             ?' out'
             :'';
 
