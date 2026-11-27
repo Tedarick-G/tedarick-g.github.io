@@ -688,6 +688,8 @@ async function openBrand(sid,b,btn){
       data
     );
 
+    await loadSisters(sid,b.slug);
+
     renderCurrent();
 
     setStatus(
@@ -1840,35 +1842,50 @@ function tsoftUrl(ts){
 
 function stockReq(u,aide,cfg){
   const sc=(cfg?.columns||[]).find(c=>c.type==='stock');
-  let sup=Math.max(0,Number(sc&&u?u[sc.field]:0)||0);
+  const sup=Math.max(0,Number(sc&&u?u[sc.field]:0)||0);
   const ai=Math.max(0,Number(aide)||0);
 
-  if(u?.on_siparis)
-    sup=Math.max(sup,1);
+  // Aide'de stok varsa ürün depodan satılır: tedarikçi stoğu hesaba katılmaz
+  const base=
+    ai>0
+      ?ai
+      :(sup>0?Math.ceil(sup/2):0);
+
+  // Ön sipariş: base veya base+1 normal sayılır
+  const pre=!!u?.on_siparis;
+  const min=pre?(ai>0?ai:0):base;
+  const max=pre?min+1:base;
 
   return{
     sup,
     ai,
-    req:ai+(sup>0?Math.ceil(sup/2):0)
+    pre,
+    min,
+    max,
+    req:max
   };
 }
 
 function stockInfo(u,ts,aide,cfg){
   if(!aideData||!ts)return null;
 
-  const{sup,ai,req}=stockReq(u,aide,cfg);
+  const r=stockReq(u,aide,cfg);
   const cur=Math.max(0,parseInt(String(ts.Stok??'').trim(),10)||0);
-  const d=req-cur;
+
+  const d=
+    cur<r.min
+      ?r.min-cur
+      :cur>r.max
+        ?r.max-cur
+        :0;
 
   return{
-    sup,
-    ai,
-    req,
+    ...r,
     cur,
     d,
     alert:
       (d>0&&cur===0)||
-      (d<0&&req===0&&!u?.on_siparis)
+      (d<0&&(r.pre||r.max===0))
   };
 }
 
@@ -1877,11 +1894,18 @@ function stockNeed(u,ts,aide,cfg){
 
   if(!x||!x.d)return '';
 
-  const{sup,ai,req,d,alert}=x;
+  const{sup,ai,pre,min,max,d,alert}=x;
+
+  const why=
+    pre
+      ?`Ön sipariş: ${min}–${max} normal${ai>0?' (Aide '+ai+')':''}`
+      :ai>0
+        ?`Gereken: ${max} (Aide ${ai}, depodan satış)`
+        :`Gereken: ${max} (⌈${sup}/2⌉)`;
 
   return(
-    `<span class="stock-need" title="Gereken: ${req} (Aide ${ai} + ${sup>0?'⌈'+sup+'/2⌉':'0'})">${d>0?'+':'-'}${Math.abs(d)}</span>`+
-    (alert?`<span class="stock-alert" title="${d>0?'Stok var, sitede bitik':'Stok yok, sitede satışta'}">!</span>`:'')
+    `<span class="stock-need" title="${why}">${d>0?'+':'-'}${Math.abs(d)}</span>`+
+    (alert?`<span class="stock-alert" title="${d>0?'Stok var, sitede bitik':'Stok yok / fazla, sitede satışta'}">!</span>`:'')
   );
 }
 
@@ -2133,10 +2157,44 @@ function cellCopy(col,u,ts,aide,i,cfg){
   }
 }
 
+const SISTER_BRANDS={
+  compel:{
+    rode:['rode-x']
+  }
+};
+
+function sisterProducts(sid,slug){
+  const out=[];
+
+  for(const sl of SISTER_BRANDS[sid]?.[slug]||[]){
+    const d=brandData.get(keyOf(sid,sl));
+
+    if(d?.urunler)
+      out.push(...d.urunler.filter(realProduct));
+  }
+
+  return out;
+}
+
+async function loadSisters(sid,slug){
+  for(const sl of SISTER_BRANDS[sid]?.[slug]||[]){
+    if(brandData.get(keyOf(sid,sl)))continue;
+
+    try{
+      const d=await sourceKvGet(sid,sl);
+
+      if(d?.urunler)
+        brandData.set(keyOf(sid,sl),{...d,urunler:dedupe(d.urunler)});
+    }catch{}
+  }
+}
+
 function computeView(
   products,
   cfg,
-  brandName
+  brandName,
+  sid,
+  slug
 ){
   const usage=
     sourceUsage(
@@ -2164,6 +2222,18 @@ function computeView(
     else
       sourceOnly.push(u);
   });
+
+  // Kardeş markaların ürünleriyle eşleşen T-Soft kayıtları "T-Soft'ta var" listesine düşmesin
+  const sis=sisterProducts(sid,slug);
+
+  if(sis.length){
+    const su=sourceUsage(sis,cfg);
+
+    for(const u of sis){
+      const ts=findTsoft(u,cfg,brandName,su);
+      if(ts)matchedRows.add(ts);
+    }
+  }
 
   const tsoftOnly=
     tsoftData
@@ -2380,7 +2450,9 @@ function renderCurrent(){
     computeView(
       products,
       cfg,
-      brandName
+      brandName,
+      activeSupplier,
+      activeBrand.slug
     );
 
   tbody.innerHTML=
@@ -3188,6 +3260,8 @@ async function downloadSelectedCSV(){
     if(!data?.urunler?.length)
       continue;
 
+    await loadSisters(sid,b.slug);
+
     const products=
       data.urunler.filter(realProduct);
 
@@ -3209,7 +3283,9 @@ async function downloadSelectedCSV(){
       computeView(
         products,
         cfg,
-        brandName
+        brandName,
+        sid,
+        b.slug
       );
 
     for(const c of cols){
